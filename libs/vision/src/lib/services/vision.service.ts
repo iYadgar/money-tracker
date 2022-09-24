@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatestWith, map } from 'rxjs';
 import { Expense } from '@money-tracker/common';
+import { LayoutService } from '@money-tracker/layout';
+import { AddExpanseDialogComponent } from '../ui/add-expanse-dialog/add-expanse-dialog.component';
 
 const monthlyExpenses: Expense[] = [
   {
@@ -37,7 +39,7 @@ const yearlyExpenses: Expense[] = [
 @Injectable({
   providedIn: 'root',
 })
-export class ExpensesService {
+export class VisionService {
   monthlyExpensesVision$: BehaviorSubject<Expense[]> = new BehaviorSubject(
     monthlyExpenses
   );
@@ -87,7 +89,13 @@ export class ExpensesService {
     );
   }
 
+  constructor(private layoutService: LayoutService) {}
+
   setIncome(value: number) {
     this.income$.next(value);
+  }
+  onAddExpanse(isYearly: boolean) {
+    const dialog = this.layoutService.openDialg(AddExpanseDialogComponent);
+    return dialog.afterClosed();
   }
 }

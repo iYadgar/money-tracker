@@ -1,0 +1,19 @@
+<h5 class='title title-size'>
+  Add an expanse
+</h5>
+
+<form [formGroup]='form'>
+  <mat-form-field  appearance="fill">
+    <mat-label>Expanse description</mat-label>
+    <input matInput  formControlName='name'>
+  </mat-form-field>
+  <mat-form-field  appearance="fill">
+    <mat-label>Expanse value</mat-label>
+    <input matInput  formControlName='value'>
+  </mat-form-field>
+</form>
+
+<div class='actions flx flx-grow  flx-end' >
+  <button (click)='handleCancel()' mat-raised-button color='warn'>Cancel</button>
+  <button  (click)='handleAdd()' [disabled]='!form.valid' mat-raised-button color='primary'>Add</button>
+</div>

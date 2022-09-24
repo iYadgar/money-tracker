@@ -11,6 +11,12 @@ import { IncomeComponent } from './ui/income/income.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { SummaryComponent } from './ui/summary/summary.component';
+import { AddExpanseDialogComponent } from './ui/add-expanse-dialog/add-expanse-dialog.component';
+import {
+  MAT_DIALOG_DEFAULT_OPTIONS,
+  MatDialogModule,
+} from '@angular/material/dialog';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -22,12 +28,18 @@ import { SummaryComponent } from './ui/summary/summary.component';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatDialogModule,
+    ReactiveFormsModule,
   ],
   declarations: [
     VisionComponent,
     ExpensesCardComponent,
     IncomeComponent,
     SummaryComponent,
+    AddExpanseDialogComponent,
+  ],
+  providers: [
+    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: false } },
   ],
 })
 export class VisionModule {}

@@ -1,0 +1,13 @@
+:host, form{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  .actions{
+    gap: 5%;
+    button{
+      width: 80px;
+    }
+  }
+}

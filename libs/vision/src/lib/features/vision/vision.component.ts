@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { BehaviorSubject, combineLatestWith, map, Observable } from 'rxjs';
-import { Expense, ExpensesService } from '@money-tracker/common';
+import { Expense } from '@money-tracker/common';
+import { VisionService } from '../../services/vision.service';
 
 @Component({
   selector: 'money-tracker-vision',
@@ -13,39 +14,39 @@ export class VisionComponent implements OnInit {
   yearlyExpenses$: BehaviorSubject<Expense[]>;
   monthlyExpenses$: BehaviorSubject<Expense[]>;
   income$: BehaviorSubject<number>;
-  constructor(public expensesService: ExpensesService) {}
+  constructor(private visionService: VisionService) {}
 
   ngOnInit(): void {
-    this.yearlyExpenses$ = this.expensesService.yearlyExpensesVision$;
-    this.monthlyExpenses$ = this.expensesService.monthlyExpensesVision$;
-    this.income$ = this.expensesService.income$;
+    this.yearlyExpenses$ = this.visionService.yearlyExpensesVision$;
+    this.monthlyExpenses$ = this.visionService.monthlyExpensesVision$;
+    this.income$ = this.visionService.income$;
     this.setSummaries();
   }
 
-  handleAddExpense() {
-    console.log('******** addExpense ********');
-  }
-
   onUpdateIncome(value: number) {
-    this.expensesService.setIncome(value);
+    this.visionService.setIncome(value);
   }
   setSummaries() {
-    this.summaries$ = this.expensesService.totalVisionMonthlyExpenses$.pipe(
-      combineLatestWith(this.expensesService.moneyForYearlyExpanses$),
+    this.summaries$ = this.visionService.totalVisionMonthlyExpenses$.pipe(
+      combineLatestWith(this.visionService.moneyForYearlyExpanses$),
       map(([totalExpanses, yearlyExpanses]) => [
         { title: 'Total monthly expanses', value: totalExpanses },
         { title: 'For yearly expanses', value: yearlyExpanses },
       ]),
-      combineLatestWith(this.expensesService.moneyForRainyDay),
+      combineLatestWith(this.visionService.moneyForRainyDay),
       map(([summaries, rainyDay]) => [
         ...summaries,
         { title: 'For rainy day', value: rainyDay },
       ]),
-      combineLatestWith(this.expensesService.forInvestment),
+      combineLatestWith(this.visionService.forInvestment),
       map(([summaries, forInvestment]) => [
         ...summaries,
         { title: 'For investment', value: forInvestment },
       ])
     );
+  }
+
+  onAddExpanse(isYearly = false) {
+    this.visionService.onAddExpanse(isYearly).subscribe(console.log);
   }
 }
