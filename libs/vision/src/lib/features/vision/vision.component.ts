@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { Expense, ExpensesService } from '@money-tracker/common';
 
 @Component({
   selector: 'money-tracker-vision',
@@ -7,7 +9,16 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VisionComponent implements OnInit {
-  constructor() {}
+  yearlyExpenses$: BehaviorSubject<Expense[]>;
+  monthlyExpenses$: BehaviorSubject<Expense[]>;
+  constructor(private expensesService: ExpensesService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.yearlyExpenses$ = this.expensesService.yearlyExpenses$;
+    this.monthlyExpenses$ = this.expensesService.monthlyExpenses$;
+  }
+
+  handleAddExpense() {
+    console.log('******** addExpense ********');
+  }
 }

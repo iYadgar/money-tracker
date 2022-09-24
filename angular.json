@@ -6,6 +6,7 @@
     "layout": "libs/layout",
     "money-tracker": "apps/money-tracker",
     "money-tracker-e2e": "apps/money-tracker-e2e",
-    "ui": "libs/ui"
+    "ui": "libs/ui",
+    "vision": "libs/vision"
   }
 }

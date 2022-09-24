@@ -1,0 +1,23 @@
+<mat-card class='flx flx-grow space-between'>
+  <span class='income-amount'>
+    <div class='title title-size'>Income</div>
+
+  </span>
+  <span class='income-amount flx align-center'>
+    <ng-container *ngIf='(isEdit$ | async) === false; else editIncome'>
+      <button (click)='setEditMode(true)' mat-icon-button color='primary'>
+        <mat-icon>edit</mat-icon>
+    </button>
+    <div class='title title-size'>{{15000 | currency: (currency$ | async) || 'ILS'}}</div>
+    </ng-container>
+  </span>
+</mat-card>
+
+<ng-template #editIncome>
+  <mat-form-field class="example-form-field" appearance="fill">
+    <input #input matInput type="number" >
+    <button *ngIf="input.value" matSuffix mat-icon-button aria-label="Clear" (click)="onUpdateIncome(input.value)">
+      <mat-icon>done</mat-icon>
+    </button>
+  </mat-form-field>
+</ng-template>

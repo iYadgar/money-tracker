@@ -1,0 +1,15 @@
+<mat-card >
+  <div class='title title-size padding-y-m  card-title'>{{title}}</div>
+  <div class='list flx flx-col'>
+    <div *ngFor='let expense of expenses' class='title padding-y-m padding-x-s list-item flx flx-grow'>
+      <span>{{expense.name | titlecase}}</span>
+      <span>{{expense.value | currency: (currency$ | async) || 'ILS'}}</span>
+    </div>
+  </div>
+  <div class='flx flx-end'>
+    <button (click)='handleAddExpense()' color='primary' mat-mini-fab>
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
+</mat-card>

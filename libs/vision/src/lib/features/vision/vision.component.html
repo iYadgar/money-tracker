@@ -1,1 +1,8 @@
-<p>vision works!</p>
+<div class='expenses'>
+  <money-tracker-expenses-card (addExpense)='handleAddExpense()' [expenses]='(monthlyExpenses$ | async) || []' title='Monthly expenses'></money-tracker-expenses-card>
+  <money-tracker-expenses-card (addExpense)='handleAddExpense()' [expenses]='(yearlyExpenses$ | async) || [] ' title='Yearly expenses'></money-tracker-expenses-card>
+</div>
+<div class='income'>
+  <money-tracker-income></money-tracker-income>
+</div>
+<div class='summary'></div>
