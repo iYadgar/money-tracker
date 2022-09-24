@@ -1,0 +1,10 @@
+<mat-card>
+
+  <mat-card-subtitle>
+    {{ title }}
+  </mat-card-subtitle>
+  <div class='title title-size'>
+    {{ value | currency: (settingsService.currencyType$ | async) || 'ILS'}}
+  </div>
+
+</mat-card>

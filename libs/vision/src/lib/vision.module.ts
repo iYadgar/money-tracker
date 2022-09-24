@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { IncomeComponent } from './ui/income/income.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { SummaryComponent } from './ui/summary/summary.component';
 
 @NgModule({
   imports: [
@@ -22,6 +23,11 @@ import { MatInputModule } from '@angular/material/input';
     MatFormFieldModule,
     MatInputModule,
   ],
-  declarations: [VisionComponent, ExpensesCardComponent, IncomeComponent],
+  declarations: [
+    VisionComponent,
+    ExpensesCardComponent,
+    IncomeComponent,
+    SummaryComponent,
+  ],
 })
 export class VisionModule {}

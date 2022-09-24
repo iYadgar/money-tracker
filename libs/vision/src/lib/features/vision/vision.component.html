@@ -2,7 +2,12 @@
   <money-tracker-expenses-card (addExpense)='handleAddExpense()' [expenses]='(monthlyExpenses$ | async) || []' title='Monthly expenses'></money-tracker-expenses-card>
   <money-tracker-expenses-card (addExpense)='handleAddExpense()' [expenses]='(yearlyExpenses$ | async) || [] ' title='Yearly expenses'></money-tracker-expenses-card>
 </div>
-<div class='income'>
-  <money-tracker-income></money-tracker-income>
+<div class='summary' *ngIf='summaries$ | async as summaries'>
+  <money-tracker-summary *ngFor='let summary of summaries'
+                         [title]='summary.title'
+                         [value]='summary.value'></money-tracker-summary>
+
 </div>
-<div class='summary'></div>
+<div class='income'>
+  <money-tracker-income [income]='(income$ | async) || 0' (updateIncome)='onUpdateIncome($event)'></money-tracker-income>
+</div>

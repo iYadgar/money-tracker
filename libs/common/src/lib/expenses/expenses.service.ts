@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, combineLatestWith, map } from 'rxjs';
 import { Expense } from '@money-tracker/common';
 
 const monthlyExpenses: Expense[] = [
@@ -38,10 +38,56 @@ const yearlyExpenses: Expense[] = [
   providedIn: 'root',
 })
 export class ExpensesService {
-  monthlyExpenses$: BehaviorSubject<Expense[]> = new BehaviorSubject(
+  monthlyExpensesVision$: BehaviorSubject<Expense[]> = new BehaviorSubject(
     monthlyExpenses
   );
-  yearlyExpenses$: BehaviorSubject<Expense[]> = new BehaviorSubject(
+  yearlyExpensesVision$: BehaviorSubject<Expense[]> = new BehaviorSubject(
     yearlyExpenses
   );
+  income$: BehaviorSubject<number> = new BehaviorSubject(0);
+
+  get totalVisionMonthlyExpenses$() {
+    return this.monthlyExpensesVision$.pipe(
+      combineLatestWith(this.yearlyExpensesVision$),
+      map(([monthlyExpenses, yearlyExpenses]) => {
+        const sumMonthly = monthlyExpenses.reduce(
+          (pre, cur) => pre + cur.value,
+          0
+        );
+        const sumYearly = yearlyExpenses.reduce(
+          (pre, cur) => pre + cur.value,
+          0
+        );
+        return sumYearly / 12 + sumMonthly;
+      })
+    );
+  }
+
+  get moneyForYearlyExpanses$() {
+    return this.yearlyExpensesVision$.pipe(
+      map(
+        (yearlyExpanses) =>
+          yearlyExpenses.reduce((pre, cur) => pre + cur.value, 0) / 12
+      )
+    );
+  }
+  get moneyForRainyDay() {
+    return this.totalVisionMonthlyExpenses$.pipe(
+      combineLatestWith(this.moneyForYearlyExpanses$),
+      map(
+        ([totalExpanse, yearlyExpenses]) => (totalExpanse - yearlyExpenses) * 3
+      )
+    );
+  }
+
+  get forInvestment() {
+    return this.totalVisionMonthlyExpenses$.pipe(
+      combineLatestWith(this.moneyForYearlyExpanses$),
+      map(([totalExpanses, yearlyExpanses]) => totalExpanses - yearlyExpanses)
+    );
+  }
+
+  setIncome(value: number) {
+    this.income$.next(value);
+  }
 }
