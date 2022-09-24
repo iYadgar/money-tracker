@@ -1,0 +1,8 @@
+{
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json",
+  "version": 2,
+  "projects": {
+    "money-tracker": "apps/money-tracker",
+    "money-tracker-e2e": "apps/money-tracker-e2e"
+  }
+}
