@@ -1,0 +1,12 @@
+<money-tracker-logo></money-tracker-logo>
+
+<div  *ngFor='let route of routes'
+      [routerLink]='route.path'
+
+      class='nav-button padding-y-m padding-x-s simple-text'
+>
+  <mat-icon class="material-icons-outlined" >{{route.icon}}</mat-icon>
+  <button [class.not-active]='(activeRoute$ | async) !== route.path' class='string-button' mat-button>
+    {{ route.path | titlecase }}
+  </button>
+</div>

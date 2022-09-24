@@ -1,0 +1,7 @@
+<money-tracker-side-panel></money-tracker-side-panel>
+<div class='flx-col flx-grow'>
+  <nav class='flx flx-grow padding-x-m title navbar'>
+    {{activeRoute$ | async | titlecase}}
+  </nav>
+  <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,25 @@
+:host{
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  height: 100%;
+  background: linear-gradient(180deg, #181053 -21.94%, #301840 17.1%, #3F033B 62.89%, #592635 110.93%);
+  padding: 24px;
+  .nav-button{
+    color: white;
+    border-bottom: 1px solid #E6E8EC0F;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 100;
+    cursor: pointer;
+    button{
+      font-family: 'Inter', sans-serif;
+      font-weight: 100;
+      &.not-active{
+        opacity: 0.4;
+      }
+    }
+
+  }
+}

@@ -6,7 +6,9 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/money-tracker",
         "index": "apps/money-tracker/src/index.html",
@@ -18,7 +20,10 @@
           "apps/money-tracker/src/favicon.ico",
           "apps/money-tracker/src/assets"
         ],
-        "styles": ["apps/money-tracker/src/styles.scss"],
+        "styles": [
+          "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
+          "apps/money-tracker/src/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -83,7 +88,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/money-tracker"],
+      "outputs": [
+        "coverage/apps/money-tracker"
+      ],
       "options": {
         "jestConfig": "apps/money-tracker/jest.config.ts",
         "passWithNoTests": true

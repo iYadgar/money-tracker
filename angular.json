@@ -2,7 +2,10 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
+    "common": "libs/common",
+    "layout": "libs/layout",
     "money-tracker": "apps/money-tracker",
-    "money-tracker-e2e": "apps/money-tracker-e2e"
+    "money-tracker-e2e": "apps/money-tracker-e2e",
+    "ui": "libs/ui"
   }
 }

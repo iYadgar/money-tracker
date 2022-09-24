@@ -1,0 +1,10 @@
+:host{
+  display: flex;
+  flex: 1;
+  .navbar{
+    align-items: center;
+    font-size: 26px;
+    max-height: 60px;
+    background: white;
+  }
+}

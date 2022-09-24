@@ -14,7 +14,13 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "strictPropertyInitialization": false,
+    "paths": {
+      "@money-tracker/common": ["libs/common/src/index.ts"],
+      "@money-tracker/layout": ["libs/layout/src/index.ts"],
+      "@money-tracker/ui": ["libs/ui/src/index.ts"],
+      "@money-tracker/vision": ["libs/vision/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

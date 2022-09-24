@@ -1,1 +1,83 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+html, body, money-tracker-root{
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  font-weight: 100;
+  background: #F8FAFC;
+}
+
+.title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+}
+.simple-text{
+  font-family: 'Inter', sans-serif;
+  font-weight: 100;
+}
+
+
+.padding-x-xs{
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.padding-x-s{
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.padding-x-m{
+  padding-left: 24px;
+  padding-right: 24px;
+}
+.padding-x-l{
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+.padding-y-xs{
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.padding-y-s{
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.padding-y-m{
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+.padding-y-l{
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+
+
+.padding-xs{
+  padding: 8px;
+}
+
+.padding-s{
+  padding: 16px;
+}
+.padding-m{
+  padding: 24px;
+}
+.padding-l{
+  padding: 32px;
+}
+.flx{
+  display: flex;
+}
+.flx-col{
+  display: flex;
+  flex-direction: column;
+}
+.flx-grow{
+  flex-grow: 1;
+}
