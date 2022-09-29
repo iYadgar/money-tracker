@@ -19,7 +19,7 @@ export class AddExpanseDialogComponent {
   }
   handleAdd() {
     const name = this.form.get('name')?.value || '';
-    const value = this.form.get('value')?.value || '';
+    const value = +this.form.get('value')?.value || 0;
     this.dialogRef.close({ name, value });
   }
 }

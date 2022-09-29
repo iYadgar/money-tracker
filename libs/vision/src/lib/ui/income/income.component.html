@@ -8,7 +8,7 @@
       <button (click)='setEditMode(true)' mat-icon-button color='primary'>
         <mat-icon>edit</mat-icon>
     </button>
-    <div class='title title-size'>{{income | currency: (currency$ | async) || 'ILS'}}</div>
+    <div class='title title-size'>{{income.value | currency: (currency$ | async) || 'ILS'}}</div>
     </ng-container>
   </span>
 </mat-card>

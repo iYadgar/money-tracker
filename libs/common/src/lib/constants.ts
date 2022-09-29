@@ -1,4 +1,5 @@
 import { APP_ROUTES } from './enums';
+import { TableViewConfig } from './interface';
 
 export const APP_ROUTES_CONFIG: { path: string; icon: string }[] = [
   {
@@ -18,3 +19,8 @@ export const APP_ROUTES_CONFIG: { path: string; icon: string }[] = [
     icon: 'dashboard_outline',
   },
 ];
+
+export const EXPENSES_TABLE_VIEW_CONFIG: TableViewConfig = {
+  name: { isCurrency: false, label: '' },
+  value: { isCurrency: true, label: '' },
+};

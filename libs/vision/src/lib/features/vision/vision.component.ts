@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { BehaviorSubject, combineLatestWith, map, Observable } from 'rxjs';
-import { Expense } from '@money-tracker/common';
+import { combineLatestWith, map, Observable, tap } from 'rxjs';
+import { Expense, Income } from '@money-tracker/common';
 import { VisionService } from '../../services/vision.service';
 
 @Component({
@@ -11,19 +11,21 @@ import { VisionService } from '../../services/vision.service';
 })
 export class VisionComponent implements OnInit {
   summaries$: Observable<{ title: string; value: number }[]>;
-  yearlyExpenses$: BehaviorSubject<Expense[]>;
-  monthlyExpenses$: BehaviorSubject<Expense[]>;
-  income$: BehaviorSubject<number>;
+  yearlyExpenses$: Observable<Expense[]>;
+  monthlyExpenses$: Observable<Expense[]>;
+  income$: Observable<Income>;
   constructor(private visionService: VisionService) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.visionService.initExpensesAndIncome();
+    this.visionService.initIncome();
     this.yearlyExpenses$ = this.visionService.yearlyExpensesVision$;
     this.monthlyExpenses$ = this.visionService.monthlyExpensesVision$;
-    this.income$ = this.visionService.income$;
+    this.income$ = this.visionService.income$.pipe(tap(console.log));
     this.setSummaries();
   }
 
-  onUpdateIncome(value: number) {
+  onUpdateIncome(value: Income) {
     this.visionService.setIncome(value);
   }
   setSummaries() {
@@ -46,7 +48,16 @@ export class VisionComponent implements OnInit {
     );
   }
 
-  onAddExpanse(isYearly = false) {
-    this.visionService.onAddExpanse(isYearly).subscribe(console.log);
+  onAddExpense(isYearly = false) {
+    this.visionService.onAddExpanse(isYearly);
+  }
+  onDeleteExpense({
+    expense,
+    isYearly = false,
+  }: {
+    expense: Expense;
+    isYearly?: boolean;
+  }) {
+    this.visionService.deleteExpense(expense, isYearly);
   }
 }

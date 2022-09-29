@@ -9,7 +9,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { SettingsService } from '@money-tracker/common';
+import { Income, SettingsService } from '@money-tracker/common';
 
 @Component({
   selector: 'money-tracker-income',
@@ -21,8 +21,8 @@ export class IncomeComponent implements OnInit {
   isEdit$ = new BehaviorSubject(false);
   currency$: BehaviorSubject<string>;
   @ViewChild('input') input: TemplateRef<Input>;
-  @Input() income: number;
-  @Output() updateIncome = new EventEmitter<number>();
+  @Input() income: Income;
+  @Output() updateIncome = new EventEmitter<Income>();
   constructor(public settingsService: SettingsService) {}
 
   ngOnInit(): void {
@@ -35,7 +35,7 @@ export class IncomeComponent implements OnInit {
 
   onUpdateIncome(value: string) {
     this.setEditMode(false);
-    this.updateIncome.emit(+value);
+    this.updateIncome.emit({ ...this.income, value: +value });
   }
 
   handleClear() {

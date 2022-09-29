@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { AngularFireModule } from '@angular/fire/compat';
+import { env } from '@money-tracker/common';
 
 const routes: Routes = [
   {
@@ -12,7 +14,11 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, RouterModule.forRoot(routes)],
+  imports: [
+    CommonModule,
+    RouterModule.forRoot(routes),
+    AngularFireModule.initializeApp(env.firebase),
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

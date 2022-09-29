@@ -1,0 +1,17 @@
+table{
+  width: 100%;
+box-shadow: none;
+}
+.mat-cell{
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+}
+.mat-column-edit{
+  width: 110px;
+}
+.mat-header-row{
+  display: none;
+}
+

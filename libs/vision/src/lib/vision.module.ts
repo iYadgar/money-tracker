@@ -17,6 +17,7 @@ import {
   MatDialogModule,
 } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
+import { UiModule } from '@money-tracker/ui';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatInputModule,
     MatDialogModule,
     ReactiveFormsModule,
+    UiModule,
   ],
   declarations: [
     VisionComponent,

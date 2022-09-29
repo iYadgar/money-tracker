@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "money-tracker-2022": {
+      "hosting": {
+        "money-tracker": [
+          "money-tracker-2022"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "money-tracker-2022"
+  }
+}

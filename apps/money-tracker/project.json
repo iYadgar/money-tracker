@@ -95,6 +95,16 @@
         "jestConfig": "apps/money-tracker/jest.config.ts",
         "passWithNoTests": true
       }
+    },
+    "deploy": {
+      "executor": "@angular/fire:deploy",
+      "options": {
+        "prerender": false,
+        "ssr": false,
+        "browserTarget": "money-tracker:build:production",
+        "firebaseProject": "money-tracker-2022",
+        "firebaseHostingSite": "money-tracker-2022"
+      }
     }
   },
   "tags": []

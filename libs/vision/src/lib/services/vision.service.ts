@@ -1,66 +1,28 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatestWith, map } from 'rxjs';
-import { Expense } from '@money-tracker/common';
+import { combineLatestWith, map, Observable, take, tap } from 'rxjs';
+import {
+  COLLECTIONS,
+  Expense,
+  FirestoreService,
+  Income,
+  UserService,
+} from '@money-tracker/common';
 import { LayoutService } from '@money-tracker/layout';
 import { AddExpanseDialogComponent } from '../ui/add-expanse-dialog/add-expanse-dialog.component';
-
-const monthlyExpenses: Expense[] = [
-  {
-    name: 'rent',
-    value: 3500,
-  },
-  {
-    name: 'internet',
-    value: 57,
-  },
-  {
-    name: 'car insurance',
-    value: 290,
-  },
-  { name: 'spotify', value: 40 },
-  { name: 'ארנונה', value: 120 },
-  { name: 'electricity', value: 225 },
-  { name: 'water', value: 70 },
-  { name: 'weed', value: 800 },
-  { name: 'fuel', value: 300 },
-  { name: 'food supplies', value: 800 },
-  { name: 'eating outside', value: 500 },
-  { name: 'hangouts', value: 600 },
-  { name: 'guitar lessons', value: 540 },
-];
-const yearlyExpenses: Expense[] = [
-  { name: 'car', value: 5000 },
-  { name: 'big events', value: 2400 },
-  { name: 'flights', value: 20000 },
-  { name: 'Shopping', value: 7000 },
-  { name: 'Health', value: 2000 },
-];
+import { QueryFn } from '@angular/fire/compat/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
 export class VisionService {
-  monthlyExpensesVision$: BehaviorSubject<Expense[]> = new BehaviorSubject(
-    monthlyExpenses
-  );
-  yearlyExpensesVision$: BehaviorSubject<Expense[]> = new BehaviorSubject(
-    yearlyExpenses
-  );
-  income$: BehaviorSubject<number> = new BehaviorSubject(0);
+  monthlyExpensesVision$: Observable<Expense[]>;
+  yearlyExpensesVision$: Observable<Expense[]>;
+  income$: Observable<Income>;
 
   get totalVisionMonthlyExpenses$() {
     return this.monthlyExpensesVision$.pipe(
-      combineLatestWith(this.yearlyExpensesVision$),
-      map(([monthlyExpenses, yearlyExpenses]) => {
-        const sumMonthly = monthlyExpenses.reduce(
-          (pre, cur) => pre + cur.value,
-          0
-        );
-        const sumYearly = yearlyExpenses.reduce(
-          (pre, cur) => pre + cur.value,
-          0
-        );
-        return sumYearly / 12 + sumMonthly;
+      map((monthlyExpenses) => {
+        return monthlyExpenses.reduce((pre, cur) => pre + cur.value, 0);
       })
     );
   }
@@ -69,7 +31,7 @@ export class VisionService {
     return this.yearlyExpensesVision$.pipe(
       map(
         (yearlyExpanses) =>
-          yearlyExpenses.reduce((pre, cur) => pre + cur.value, 0) / 12
+          yearlyExpanses.reduce((pre, cur) => pre + cur.value, 0) / 12
       )
     );
   }
@@ -89,13 +51,66 @@ export class VisionService {
     );
   }
 
-  constructor(private layoutService: LayoutService) {}
+  constructor(
+    private layoutService: LayoutService,
+    private firestoreService: FirestoreService,
+    private userService: UserService
+  ) {}
 
-  setIncome(value: number) {
-    this.income$.next(value);
+  setIncome(income: Income) {
+    if (income.id) {
+      return this.firestoreService.updateDocument<Income>(
+        COLLECTIONS.INCOME,
+        income.id,
+        income
+      );
+    }
+    return this.firestoreService.createDocument(COLLECTIONS.INCOME, income);
   }
   onAddExpanse(isYearly: boolean) {
-    const dialog = this.layoutService.openDialg(AddExpanseDialogComponent);
-    return dialog.afterClosed();
+    const collection = isYearly
+      ? COLLECTIONS.YEARLY_EXPANSES
+      : COLLECTIONS.MONTHLY_EXPANSES;
+    return this.layoutService
+      .openDialog(AddExpanseDialogComponent)
+      .afterClosed()
+      .pipe(
+        tap((expense) => {
+          this.firestoreService.createDocument<Expense>(collection, expense);
+        }),
+        take(1)
+      )
+      .subscribe();
+  }
+
+  initExpensesAndIncome() {
+    this.monthlyExpensesVision$ = this.firestoreService.getCollection<Expense>(
+      COLLECTIONS.MONTHLY_EXPANSES
+    );
+
+    this.yearlyExpensesVision$ = this.firestoreService.getCollection<Expense>(
+      COLLECTIONS.YEARLY_EXPANSES
+    );
+  }
+  initIncome() {
+    const defaultIncome = {
+      user: this.userService.user.id || '',
+      value: 0,
+      id: '',
+    };
+    const queryFn: QueryFn = (ref) =>
+      ref.where('user', '==', this.userService.user.id);
+    this.income$ = this.firestoreService
+      .getCollection<Income>(COLLECTIONS.INCOME, queryFn)
+      .pipe(map(([income]) => (income ? income : defaultIncome)));
+  }
+
+  deleteExpense(expense: Expense, isYearly: boolean) {
+    const collection = isYearly
+      ? COLLECTIONS.YEARLY_EXPANSES
+      : COLLECTIONS.MONTHLY_EXPANSES;
+    if (expense.id) {
+      this.firestoreService.deleteDocument<Expense>(collection, expense.id);
+    }
   }
 }
