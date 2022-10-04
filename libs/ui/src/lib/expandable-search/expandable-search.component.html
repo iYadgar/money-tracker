@@ -1,0 +1,8 @@
+<ng-container *ngLet='(isSearchOn$ | async) as isSearchOn'>
+  <div [class.on]='!!isSearchOn' class='search-bar-wrapper'>
+    <button clickedOutside (clickOutside)='handleFocusOut()' mat-icon-button (click)='toggleSearch(!isSearchOn)'>
+      <mat-icon>search_outline</mat-icon>
+    </button>
+    <input  [formControl]='search' [class.on]='!!isSearchOn'  #searchInput placeholder='Search...' class='search-input' type='text'>
+  </div>
+</ng-container>

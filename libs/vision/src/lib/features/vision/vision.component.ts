@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { combineLatestWith, map, Observable, tap } from 'rxjs';
-import { Expense, Income } from '@money-tracker/common';
+import { combineLatest, combineLatestWith, map, Observable, tap } from 'rxjs';
+import { ExpenseGroup, Income } from '@money-tracker/common';
 import { VisionService } from '../../services/vision.service';
 
 @Component({
@@ -11,8 +11,8 @@ import { VisionService } from '../../services/vision.service';
 })
 export class VisionComponent implements OnInit {
   summaries$: Observable<{ title: string; value: number }[]>;
-  yearlyExpenses$: Observable<Expense[]>;
-  monthlyExpenses$: Observable<Expense[]>;
+  yearlyExpenses$: Observable<ExpenseGroup[]>;
+  monthlyExpenses$: Observable<ExpenseGroup[]>;
   income$: Observable<Income>;
   constructor(private visionService: VisionService) {}
 
@@ -29,35 +29,33 @@ export class VisionComponent implements OnInit {
     this.visionService.setIncome(value);
   }
   setSummaries() {
-    this.summaries$ = this.visionService.totalVisionMonthlyExpenses$.pipe(
-      combineLatestWith(this.visionService.moneyForYearlyExpanses$),
-      map(([totalExpanses, yearlyExpanses]) => [
-        { title: 'Total monthly expanses', value: totalExpanses },
-        { title: 'For yearly expanses', value: yearlyExpanses },
-      ]),
-      combineLatestWith(this.visionService.moneyForRainyDay),
-      map(([summaries, rainyDay]) => [
-        ...summaries,
-        { title: 'For rainy day', value: rainyDay },
-      ]),
-      combineLatestWith(this.visionService.forInvestment),
-      map(([summaries, forInvestment]) => [
-        ...summaries,
-        { title: 'For investment', value: forInvestment },
-      ])
+    this.summaries$ = combineLatest([
+      this.visionService.totalVisionMonthlyExpenses$,
+      this.visionService.moneyForYearlyExpenses$,
+      this.visionService.moneyForRainyDay,
+      this.visionService.forInvestment,
+    ]).pipe(
+      map(([totalExpenses, yearlyExpenses, rainyDay, forInvestment]) => {
+        return [
+          { title: 'For rainy day', value: rainyDay },
+          { title: 'Total monthly expenses', value: totalExpenses },
+          { title: 'For investment', value: forInvestment },
+          { title: 'For yearly expenses', value: yearlyExpenses },
+        ];
+      })
     );
   }
 
-  onAddExpense(isYearly = false) {
-    this.visionService.onAddExpanse(isYearly);
-  }
   onDeleteExpense({
     expense,
     isYearly = false,
   }: {
-    expense: Expense;
+    expense: ExpenseGroup;
     isYearly?: boolean;
   }) {
     this.visionService.deleteExpense(expense, isYearly);
+  }
+  onEditExpense(expense: ExpenseGroup, isYearly = false) {
+    this.visionService.editExpense(expense, isYearly);
   }
 }

@@ -1,0 +1,5 @@
+<ng-container *ngIf='(viewConfig$ | async) as viewConfig'>
+  <ng-container *ngIf='(detailedExpenses$ | async) as detailedExpenses'>
+    <money-tracker-table (deleted)='handleDeleteExpense($event)' (cellEdited)='handleEditCell($event)' [dataSource]='detailedExpenses' [viewConfig]='viewConfig'></money-tracker-table>
+  </ng-container>
+</ng-container>

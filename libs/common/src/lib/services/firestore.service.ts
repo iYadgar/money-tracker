@@ -8,8 +8,8 @@ import { COLLECTIONS } from '../enums';
 export class FirestoreService {
   constructor(private firestore: AngularFirestore) {}
 
-  createDocument<T>(collection: COLLECTIONS, item: T) {
-    return this.firestore.collection<T>(collection).add(item);
+  createDocument<T>(collection: COLLECTIONS, item: Partial<T>) {
+    return this.firestore.collection<T>(collection).add(item as T);
   }
   getCollection<T>(
     collection: COLLECTIONS,

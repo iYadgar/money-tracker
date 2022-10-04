@@ -7,7 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import {
-  Expense,
+  ExpenseGroup,
   EXPENSES_TABLE_VIEW_CONFIG,
   SettingsService,
 } from '@money-tracker/common';
@@ -21,23 +21,23 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class ExpensesCardComponent implements OnInit {
   @Input() title: string;
-  @Input() expenses: Expense[];
+  @Input() expenses: ExpenseGroup[];
   @Output() addExpense = new EventEmitter<void>();
-  @Output() deleteExpense = new EventEmitter<Expense>();
+  @Output() deleteExpense = new EventEmitter<ExpenseGroup>();
+  @Output() editExpense = new EventEmitter<ExpenseGroup>();
   currency$: BehaviorSubject<string>;
   viewConfig = EXPENSES_TABLE_VIEW_CONFIG;
 
   constructor(private settingsService: SettingsService) {}
 
-  handleAddExpense() {
-    this.addExpense.emit();
-  }
-
   ngOnInit(): void {
     this.currency$ = this.settingsService.currencyType$;
   }
 
-  handleDeleted(expense: Expense) {
+  handleDeleted(expense: ExpenseGroup) {
     this.deleteExpense.emit(expense);
+  }
+  handleEdited(expense: ExpenseGroup) {
+    this.editExpense.emit({ ...expense, value: +expense.value });
   }
 }

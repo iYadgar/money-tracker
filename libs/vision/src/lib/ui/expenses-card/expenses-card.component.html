@@ -1,12 +1,5 @@
 <mat-card >
   <div class='title title-size padding-y-m  card-title'>{{title}}</div>
-  <div class='list flx flx-col'>
-    <money-tracker-table (deleted)='handleDeleted($event)' [dataSource]='expenses' [viewConfig]='viewConfig'></money-tracker-table>
-  </div>
-  <div class='flx flx-end'>
-    <button (click)='handleAddExpense()' color='primary' mat-mini-fab>
-      <mat-icon>add</mat-icon>
-    </button>
-  </div>
-
+    <money-tracker-table (cellEdited)='handleEdited($event)' (deleted)='handleDeleted($event)' [dataSource]='expenses' [viewConfig]='viewConfig'></money-tracker-table>
 </mat-card>
+

@@ -1,0 +1,31 @@
+:host{
+  max-width: 100%;
+  .search-bar-wrapper{
+    border-radius: 8px;
+    border: 1px solid  rgba(0, 0, 0, 0.18);
+    width: 40px;
+    transition: 0.2s linear width;
+    display: flex;
+    background: rgba(255, 255, 255, 0.5);
+    &.on{
+      width: 350px;
+      .search-input{
+        width: 300px;
+      }
+    }
+    .search-input{
+      transition: 0.2s linear width;
+      width: 0;
+      border-bottom-right-radius: 8px;
+      border-top-right-radius: 8px;
+      padding: 10px;
+      background: transparent;
+      border: none;
+      font-family: Poppins,sans-serif;
+      &:focus-within{
+        outline: none;
+      }
+    }
+  }
+
+}

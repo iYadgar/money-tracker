@@ -1,6 +1,6 @@
 <div class='expenses'>
-  <money-tracker-expenses-card (deleteExpense)='onDeleteExpense({expense:$event})' (addExpense)='onAddExpense()' [expenses]='(monthlyExpenses$ | async) || []' title='Monthly expenses'></money-tracker-expenses-card>
-  <money-tracker-expenses-card (deleteExpense)='onDeleteExpense({expense:$event, isYearly:true})' (addExpense)='onAddExpense(true)' [expenses]='(yearlyExpenses$ | async) || [] ' title='Yearly expenses'></money-tracker-expenses-card>
+  <money-tracker-expenses-card (editExpense)='onEditExpense($event)' (deleteExpense)='onDeleteExpense({expense:$event})'  [expenses]='(monthlyExpenses$ | async) || []' title='Monthly expenses'></money-tracker-expenses-card>
+  <money-tracker-expenses-card (editExpense)='onEditExpense($event,true)' (deleteExpense)='onDeleteExpense({expense:$event, isYearly:true})'  [expenses]='(yearlyExpenses$ | async) || [] ' title='Yearly expenses'></money-tracker-expenses-card>
 </div>
 <div class='summary' *ngIf='summaries$ | async as summaries'>
   <money-tracker-summary *ngFor='let summary of summaries'

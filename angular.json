@@ -3,6 +3,7 @@
   "version": 2,
   "projects": {
     "common": "libs/common",
+    "expenses": "libs/expenses",
     "layout": "libs/layout",
     "money-tracker": "apps/money-tracker",
     "money-tracker-e2e": "apps/money-tracker-e2e",

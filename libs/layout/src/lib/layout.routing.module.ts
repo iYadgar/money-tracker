@@ -26,9 +26,9 @@ const routes: Routes = [
           import('@money-tracker/vision').then((m) => m.VisionModule),
       },
       {
-        path: APP_ROUTES.EXPANSES,
+        path: APP_ROUTES.EXPENSES,
         loadChildren: () =>
-          import('@money-tracker/vision').then((m) => m.VisionModule),
+          import('@money-tracker/expenses').then((m) => m.ExpensesModule),
       },
       {
         path: APP_ROUTES.ASSETS,
