@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { DetailedExpense, TableViewConfig } from '@money-tracker/common';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ExpensesService } from '../../services/expenses.service';
+import { TableBulkUpdateEvent } from '@money-tracker/ui';
 
 @Component({
   selector: 'money-tracker-expenses',
@@ -11,12 +12,14 @@ import { ExpensesService } from '../../services/expenses.service';
 })
 export class ExpensesComponent implements OnInit {
   viewConfig$: Observable<TableViewConfig>;
+  isLoading$: Observable<boolean>;
   detailedExpenses$: Observable<DetailedExpense[]>;
   constructor(private expensesService: ExpensesService) {}
 
   ngOnInit(): void {
     this.viewConfig$ = this.expensesService.getGridViewConfig();
     this.detailedExpenses$ = this.expensesService.detailedExpenses$;
+    this.isLoading$ = this.expensesService.isLoading$;
   }
 
   handleDeleteExpense(expense: DetailedExpense) {
@@ -26,5 +29,13 @@ export class ExpensesComponent implements OnInit {
   handleEditCell(expense: DetailedExpense) {
     console.log('expense:', expense);
     this.expensesService.editExpense(expense);
+  }
+
+  async handleImport($event: any[][]) {
+    await this.expensesService.handleImportExpenses($event);
+  }
+  async bulkUpdate(event: TableBulkUpdateEvent) {
+    console.log('event:', event);
+    await this.expensesService.bulkUpdate(event);
   }
 }

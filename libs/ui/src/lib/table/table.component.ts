@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   EventEmitter,
   HostListener,
   Input,
@@ -16,13 +17,17 @@ import {
   ColDef,
   GridApi,
   GridReadyEvent,
+  IsRowSelectable,
+  SelectionChangedEvent,
 } from 'ag-grid-community';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { DeleteButtonComponent } from './delete-button/delete-button.component';
 import { SelectComponent } from './select/select.component';
 import { DatePickerComponent } from './date-picker/date-picker.component';
-import { map, Observable, startWith, Subject, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
+import readXlsxFile from 'read-excel-file';
+import { TableBulkUpdateEvent } from '../interfaces';
 
 @Component({
   selector: 'money-tracker-table',
@@ -35,36 +40,36 @@ export class TableComponent implements OnInit, OnDestroy {
   displayedColumns: ColDef[];
   searchValue$ = new Subject<string>();
   destroy$ = new Subject();
-  dataSource$: Observable<Record<any, any>[]>;
   @Input() viewConfig: TableViewConfig;
   @Input() dataSource: Record<any, any>[];
-  @Input() addLabel: string;
-  @Input() isResizeable = false;
-  @Input() isEditable = true;
   @Output() deleted = new EventEmitter<any>();
   @Output() cellEdited = new EventEmitter<any>();
+  @Output() bulkUpdated = new EventEmitter<TableBulkUpdateEvent>();
+  @Output() imported = new EventEmitter<any[][]>();
   @ViewChild('deleteButton') deleteButton: TemplateRef<MatButton>;
+  @ViewChild('uploadInput') uploadInput: ElementRef<HTMLInputElement>;
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.gridApi.sizeColumnsToFit();
   }
+  isRowSelectable: IsRowSelectable = (node) => !!this.viewConfig.isSelectable;
 
   constructor(private currencyPipe: CurrencyPipe, private datePipe: DatePipe) {}
 
   ngOnInit(): void {
+    this.initViewConfig();
     this.displayedColumns = this.getDisplayedColumns();
-    this.dataSource$ = this.searchValue$.asObservable().pipe(
-      startWith(''),
-      map((value) => {
-        return this.dataSource.filter((obj) =>
-          Object.values(obj).some((v) => {
-            const simplifiedSearchValue = value.toLowerCase().trim();
-            const simplifiedDataValue = v.toString().toLowerCase().trim();
-            return simplifiedDataValue.includes(simplifiedSearchValue);
-          })
-        );
-      })
-    );
+  }
+  initViewConfig() {
+    this.viewConfig = {
+      ...this.viewConfig,
+      isResizeable: !!this.viewConfig.isResizeable,
+      isEditable: this.viewConfig.isEditable || true,
+      rowSelection: this.viewConfig.rowSelection || 'multiple',
+      isSelectable: !!this.viewConfig.isSelectable,
+      shouldImport: !!this.viewConfig.shouldImport,
+      shouldExport: !!this.viewConfig.shouldExport,
+    };
   }
 
   handleDeleted(element: any) {
@@ -77,9 +82,20 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   handleCellValueChange(param: CellValueChangedEvent<any>) {
-    this.cellEdited.emit(param.data);
+    const selectedRows = param.api
+      .getSelectedNodes()
+      .map((selectedRow) => selectedRow.data);
+    if (selectedRows.length) {
+      this.bulkUpdated.emit({
+        selectedRows,
+        field: param.colDef?.field || '',
+        value: param.value,
+      });
+    } else {
+      this.cellEdited.emit(param.data);
+    }
   }
-  getDisplayedColumns() {
+  getDisplayedColumns(): ColDef[] {
     const deleteCol: ColDef = {
       headerName: '',
       field: 'delete',
@@ -90,11 +106,10 @@ export class TableComponent implements OnInit, OnDestroy {
       },
       cellClass: 'delete-cell',
     };
-
-    return [
+    const response = [
       deleteCol,
-      ...Object.keys(this.viewConfig).map((key) => {
-        const currentConfig = this.viewConfig[key];
+      ...Object.keys(this.viewConfig.columnDefs).map((key): ColDef => {
+        const currentConfig = this.viewConfig.columnDefs[key];
         const isCurrency = currentConfig.isCurrency;
         const isSelectable = !!currentConfig.selectableValues;
         const headerName = currentConfig.label;
@@ -127,8 +142,8 @@ export class TableComponent implements OnInit, OnDestroy {
           headerName,
           floatingFilter: shouldFilter,
           field: key,
-          editable: this.isEditable,
-          resizable: this.isResizeable,
+          editable: this.viewConfig.isEditable,
+          resizable: this.viewConfig.isResizeable,
           sortable: true,
           ...currentFilter,
           ...(isSelectable && selectableColumn),
@@ -137,6 +152,16 @@ export class TableComponent implements OnInit, OnDestroy {
         };
       }),
     ];
+    if (this.viewConfig.isSelectable) {
+      response[1] = {
+        ...response[1],
+        headerCheckboxSelectionFilteredOnly: true,
+        headerCheckboxSelection: true,
+        checkboxSelection: true,
+        showDisabledCheckboxes: true,
+      };
+    }
+    return response;
   }
 
   handleAddRow() {
@@ -156,5 +181,23 @@ export class TableComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
+  }
+
+  openImport() {
+    this.uploadInput.nativeElement.click();
+  }
+
+  async handleImport(event: any) {
+    const response = await readXlsxFile(event.target.files[0]);
+    this.imported.emit(response.slice(1, response.length));
+  }
+
+  onSelectionChange(event: SelectionChangedEvent<any>) {
+    const selectedRows = event.api.getSelectedRows();
+    console.log('selectedRows:', selectedRows);
+  }
+
+  handleQuickSearch(value: string) {
+    this.gridApi.setQuickFilter(value);
   }
 }

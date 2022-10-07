@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, QueryFn } from '@angular/fire/compat/firestore';
+import {
+  AngularFirestore,
+  DocumentData,
+  QueryFn,
+} from '@angular/fire/compat/firestore';
 import { COLLECTIONS } from '../enums';
 
 @Injectable({
@@ -31,5 +35,34 @@ export class FirestoreService {
   }
   deleteDocument<T>(collection: COLLECTIONS, id: string) {
     return this.firestore.doc<T>(`${collection}/${id}`).delete();
+  }
+  async uploadBatch<T extends DocumentData>(
+    collection: COLLECTIONS,
+    data: T[]
+  ) {
+    const batch = this.firestore.firestore.batch();
+    const sampleRef = this.firestore.firestore.collection(collection);
+    data.forEach((value) => {
+      const id = sampleRef.doc().id;
+      batch.set(sampleRef.doc(id), value);
+    });
+
+    await batch.commit();
+  }
+  async batchUpdate<T extends DocumentData>(
+    collection: COLLECTIONS,
+    data: T[],
+    updateValues: Partial<T>
+  ) {
+    const batch = this.firestore.firestore.batch();
+    const sampleRef = this.firestore.firestore.collection(collection);
+    data.forEach((value) => {
+      if (value['id']) {
+        console.log(`****** ??? ******`);
+        const docRef = sampleRef.doc(value['id']);
+        batch.update(docRef, updateValues);
+      }
+    });
+    await batch.commit();
   }
 }

@@ -21,16 +21,24 @@ export interface DetailedExpense {
   id: string;
   user: string;
 }
-export type TableViewConfig = Record<
-  string,
-  {
-    label: string;
-    isCurrency?: boolean;
-    selectableValues?: { value: any; viewValue: string }[];
-    isDate?: boolean;
-    filter?: boolean;
-  }
->;
+export type TableViewConfig = {
+  addLabel?: string;
+  isResizeable?: boolean;
+  isEditable?: boolean;
+  rowSelection?: 'single' | 'multiple';
+  isSelectable?: boolean;
+  shouldImport?: boolean;
+  shouldExport?: boolean;
+  columnDefs: Record<string, ColumnAttributes>;
+};
+
+export interface ColumnAttributes {
+  label: string;
+  isCurrency?: boolean;
+  selectableValues?: { value: any; viewValue: string }[];
+  isDate?: boolean;
+  filter?: boolean;
+}
 
 export interface Category {
   name: string;

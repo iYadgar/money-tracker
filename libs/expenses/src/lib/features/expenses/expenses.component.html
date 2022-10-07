@@ -1,5 +1,18 @@
 <ng-container *ngIf='(viewConfig$ | async) as viewConfig'>
   <ng-container *ngIf='(detailedExpenses$ | async) as detailedExpenses'>
-    <money-tracker-table (deleted)='handleDeleteExpense($event)' (cellEdited)='handleEditCell($event)' [dataSource]='detailedExpenses' [viewConfig]='viewConfig'></money-tracker-table>
+    <ng-container *ngIf='(isLoading$ | async) === false; else loading'>
+      <money-tracker-table (imported)='handleImport($event)'
+                           (deleted)='handleDeleteExpense($event)'
+                           (cellEdited)='handleEditCell($event)'
+                           (bulkUpdated)='bulkUpdate($event)'
+                           [dataSource]='detailedExpenses'
+                           [viewConfig]='viewConfig'
+      ></money-tracker-table>
+    </ng-container>
   </ng-container>
 </ng-container>
+<ng-template #loading>
+  <div class='loading-wrapper'>
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

@@ -45,6 +45,6 @@ export class ExpandableSearchComponent implements OnInit, OnDestroy {
   }
 
   handleFocusOut() {
-    this.toggleSearch(false);
+    // this.toggleSearch(false);
   }
 }

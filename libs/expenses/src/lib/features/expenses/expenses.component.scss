@@ -2,4 +2,10 @@
   display: flex;
   flex: 1;
   padding: 48px;
+  .loading-wrapper{
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+  }
 }
