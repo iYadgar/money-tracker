@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ElementRef,
@@ -28,6 +29,7 @@ import { DatePickerComponent } from './date-picker/date-picker.component';
 import { Subject } from 'rxjs';
 import readXlsxFile from 'read-excel-file';
 import { TableBulkUpdateEvent } from '../interfaces';
+import { LinkCellComponent } from './link-cell/link-cell.component';
 
 @Component({
   selector: 'money-tracker-table',
@@ -59,6 +61,7 @@ export class TableComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initViewConfig();
     this.displayedColumns = this.getDisplayedColumns();
+    console.log('this.displayedColumns:', this.displayedColumns);
   }
   initViewConfig() {
     this.viewConfig = {
@@ -110,11 +113,14 @@ export class TableComponent implements OnInit, OnDestroy {
       deleteCol,
       ...Object.keys(this.viewConfig.columnDefs).map((key): ColDef => {
         const currentConfig = this.viewConfig.columnDefs[key];
+        const isLink = !!currentConfig.linkConfig;
         const isCurrency = currentConfig.isCurrency;
         const isSelectable = !!currentConfig.selectableValues;
         const headerName = currentConfig.label;
         const isDateColumn = currentConfig.isDate;
         const shouldFilter = currentConfig.filter;
+        const isGroup = !!currentConfig.isGroup;
+        console.log('isGroup:', isGroup);
         const currentFilter = shouldFilter && {
           filter: isDateColumn
             ? 'agDateColumnFilter'
@@ -138,6 +144,13 @@ export class TableComponent implements OnInit, OnDestroy {
           cellEditor: DatePickerComponent,
         };
 
+        const getLinkColumn = (params: Record<any, any>) => ({
+          cellRenderer: LinkCellComponent,
+          cellRendererParams: {
+            ...params,
+          },
+        });
+
         return {
           headerName,
           floatingFilter: shouldFilter,
@@ -149,6 +162,8 @@ export class TableComponent implements OnInit, OnDestroy {
           ...(isSelectable && selectableColumn),
           ...(isCurrency && currencyColumn),
           ...(isDateColumn && dateColumn),
+          ...(isLink &&
+            getLinkColumn(currentConfig.linkConfig as Record<string, string>)),
         };
       }),
     ];

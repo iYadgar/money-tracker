@@ -1,7 +1,7 @@
 :host{
   display: flex;
   flex-direction: column;
-  width: 240px;
+  max-width: 240px;
   height: 100%;
   background: linear-gradient(180deg, #181053 -21.94%, #301840 17.1%, #3F033B 62.89%, #592635 110.93%);
   padding: 24px;

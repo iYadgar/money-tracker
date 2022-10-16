@@ -1,0 +1,4 @@
+<a *ngIf='link; else emptyState' mat-raised-button [href]='link'>{{displayValue}}</a>
+<ng-template #emptyState>
+  Add link (Dbl click)
+</ng-template>

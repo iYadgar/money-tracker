@@ -1,10 +1,14 @@
 :host{
   display: flex;
   flex: 1;
+  width: 100%;
+  .layout-wrapper{
+    width: calc(100% - 240px);
   .navbar{
     align-items: center;
     font-size: 26px;
     max-height: 60px;
     background: white;
+  }
   }
 }

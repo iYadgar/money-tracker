@@ -1,0 +1,30 @@
+:host{
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 48px;
+  mat-tab-group{
+    flex: 1;
+    ::ng-deep .table-card{
+      margin-top: 16px;
+      height: 65%;
+    }
+  }
+  .summaries{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+    mat-card{
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+  .actions{
+    display: flex;
+    width: 100%;
+    justify-content: end;
+    padding: 16px 0;
+  }
+}
+

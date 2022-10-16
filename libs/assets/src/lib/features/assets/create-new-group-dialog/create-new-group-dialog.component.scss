@@ -1,0 +1,21 @@
+:host{
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 16px;
+
+  .calendar-wrapper{
+    display: flex;
+    height: 350px;
+    justify-content: center;
+    mat-calendar{
+      width: 75%;
+    }
+  }
+  .actions{
+    display: flex;
+    width: 100%;
+    gap: 8px;
+    justify-content: end;
+  }
+}

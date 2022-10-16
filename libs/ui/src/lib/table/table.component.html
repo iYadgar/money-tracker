@@ -1,5 +1,5 @@
 <div class='actions'>
-  <div class='search'>
+  <div *ngIf='viewConfig.quickFilters' class='search'>
     <money-tracker-expandable-search (searchChanged)='handleQuickSearch($event)'></money-tracker-expandable-search>
   </div>
   <div class='buttons'>
@@ -22,9 +22,9 @@
                  [rowMultiSelectWithClick]='true'
                  [suppressRowDeselection]='true'
                  [suppressRowClickSelection]='true'
+                 [pagination]='!!viewConfig.pagination'
+                 [paginationPageSize]='50'
                  (gridReady)='onGridReady($event)'
                  (cellValueChanged)='handleCellValueChange($event)'
                  (selectionChanged)='onSelectionChange($event)'
-
-
 ></ag-grid-angular>

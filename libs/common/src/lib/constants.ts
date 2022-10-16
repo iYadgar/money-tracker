@@ -32,16 +32,39 @@ export const DETAILED_EXPENSES_TABLE_VIEW_CONFIG: TableViewConfig = {
   rowSelection: 'multiple',
   shouldImport: true,
   shouldExport: true,
+  quickFilters: true,
+  pagination: true,
   columnDefs: {
     name: { label: 'Name', filter: true },
     value: { isCurrency: true, label: 'Amount', filter: true },
     date: { label: 'Date', isDate: true, filter: true },
-    category: { label: 'Category', filter: true },
   },
 };
 
-export const EXPENSES_IMPORT_CONFIG = [
-  { tableName: 'Date', key: 'date' },
-  { tableName: 'Name of expense', key: 'name' },
-  { tableName: 'Amount', key: 'value' },
-];
+export const ASSETS_TABLE_VIEW_CONFIG: TableViewConfig = {
+  isResizeable: true,
+  columnDefs: {
+    type: { label: 'Type' },
+    link: {
+      label: 'Private area link',
+      linkConfig: {
+        displayValue: 'Personal area',
+      },
+    },
+    establishment: { label: 'Establishment' },
+    amount: { label: 'Amount', isCurrency: true },
+    isPension: {
+      label: 'Pension',
+      selectableValues: [
+        {
+          value: true,
+          viewValue: 'Yes',
+        },
+        {
+          value: false,
+          viewValue: 'No',
+        },
+      ],
+    },
+  },
+};

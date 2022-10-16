@@ -1,0 +1,41 @@
+<ng-container *ngIf="assetsGroups$ | async as assetsGroups">
+  <mat-tab-group #tabGroup (selectedTabChange)="handleTabChange($event)">
+    <mat-tab
+      *ngFor="let assetGroup of assetsGroups; trackBy: trackAssets"
+      [label]="(assetGroup.createdAt | date) || ''"
+    >
+      <mat-card class='table-card'>
+        <money-tracker-table
+          [dataSource]='assetGroup.assets'
+          [viewConfig]='viewConfig'
+          (cellEdited)='onEdit($event)'
+        >
+        </money-tracker-table>
+      </mat-card>
+      <div
+        *ngIf="currentGroupNetWorth$ | async as currentGroupNetWorth"
+        class="summaries"
+      >
+        <mat-card>
+          <span class='title title-size'> Net worth including pension </span>
+          <span class='title title-size'>{{ currentGroupNetWorth.withPension | currency:'ILS' }}</span>
+        </mat-card>
+        <mat-card>
+          <span class='title title-size'> Net worth not including pension </span>
+          <span class='title title-size'>{{ currentGroupNetWorth.withoutPension | currency:'ILS' }}</span>
+        </mat-card>
+      </div>
+      <div class="actions">
+        <button (click)="handleDelete()" mat-raised-button color="warn">
+          Delete group
+        </button>
+      </div>
+
+    </mat-tab>
+    <mat-tab label="Add">
+      <money-tracker-create-new-group
+        (clickedAddNewGroup)="addGroup()"
+      ></money-tracker-create-new-group>
+    </mat-tab>
+  </mat-tab-group>
+</ng-container>

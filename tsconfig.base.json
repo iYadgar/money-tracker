@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "strictPropertyInitialization": false,
     "paths": {
+      "@money-tracker/assets": ["libs/assets/src/index.ts"],
       "@money-tracker/common": ["libs/common/src/index.ts"],
       "@money-tracker/expenses": ["libs/expenses/src/index.ts"],
       "@money-tracker/layout": ["libs/layout/src/index.ts"],

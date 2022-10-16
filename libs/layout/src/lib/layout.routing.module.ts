@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
-import { APP_ROUTES } from '../../../common/src/lib/enums';
+import { APP_ROUTES } from '@money-tracker/common';
 
 const routes: Routes = [
   {
@@ -33,7 +33,7 @@ const routes: Routes = [
       {
         path: APP_ROUTES.ASSETS,
         loadChildren: () =>
-          import('@money-tracker/vision').then((m) => m.VisionModule),
+          import('@money-tracker/assets').then((m) => m.AssetsModule),
       },
     ],
   },

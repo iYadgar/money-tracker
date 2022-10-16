@@ -21,7 +21,26 @@ export interface DetailedExpense {
   id: string;
   user: string;
 }
+export interface AssetGroup {
+  createdAt: string;
+  assets: Asset[];
+  id: string;
+}
+export interface Asset {
+  type: string;
+  link?: string;
+  establishment: string;
+  amount: number;
+  id?: string;
+  isPension?: boolean | 'Yes' | 'No';
+}
+export interface AssetGroupWorth {
+  withPension: number;
+  withoutPension: number;
+}
 export type TableViewConfig = {
+  pagination?: boolean;
+  quickFilters?: boolean;
   addLabel?: string;
   isResizeable?: boolean;
   isEditable?: boolean;
@@ -33,11 +52,15 @@ export type TableViewConfig = {
 };
 
 export interface ColumnAttributes {
+  isGroup?: boolean;
   label: string;
   isCurrency?: boolean;
   selectableValues?: { value: any; viewValue: string }[];
   isDate?: boolean;
   filter?: boolean;
+  linkConfig?: {
+    displayValue: string;
+  };
 }
 
 export interface Category {

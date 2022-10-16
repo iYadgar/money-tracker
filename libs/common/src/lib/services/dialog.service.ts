@@ -9,8 +9,8 @@ export class DialogService {
   constructor(private dialog: MatDialog) {}
   openDialog(component: ComponentType<any>, config?: MatDialogConfig) {
     return this.dialog.open(component, {
-      width: '350px',
-      height: '400px',
+      width: '450px',
+      height: '500px',
       ...config,
     });
   }

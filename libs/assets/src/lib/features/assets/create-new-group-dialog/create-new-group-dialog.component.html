@@ -1,0 +1,15 @@
+<div class='title-size title'>
+  Choose group date:
+</div>
+<div class='calendar-wrapper'>
+  <mat-calendar [(selected)]='selectedDate'></mat-calendar>
+</div>
+
+<div class='actions'>
+  <button mat-stroked-button color='warn' (click)='handleCancel()'>
+    Cancel
+  </button>
+  <button mat-stroked-button color='primary' (click)='handleSubmit()'>
+    Ok
+  </button>
+</div>

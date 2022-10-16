@@ -8,8 +8,8 @@ import {
   TableViewConfig,
   UserService,
 } from '@money-tracker/common';
-import { combineLatest, map, Observable, startWith, Subject, tap } from 'rxjs';
-import { TableBulkUpdateEvent } from '../../../../ui/src/lib/interfaces';
+import { combineLatest, map, Observable, startWith, Subject } from 'rxjs';
+import { TableBulkUpdateEvent } from '@money-tracker/ui';
 
 @Injectable({
   providedIn: 'root',
@@ -73,27 +73,26 @@ export class ExpensesService {
     return this.createExpense(expense);
   }
   getGridViewConfig(): Observable<TableViewConfig> {
-    return this.categoriesService.categories$
-      .pipe(
-        map((categories): TableViewConfig => {
-          const category = {
-            label: 'Category',
-            filter: true,
-            selectableValues: categories.map((category) => ({
-              value: category.id,
-              viewValue: category.name,
-            })),
-          };
-          return {
-            ...DETAILED_EXPENSES_TABLE_VIEW_CONFIG,
-            columnDefs: {
-              ...DETAILED_EXPENSES_TABLE_VIEW_CONFIG.columnDefs,
-              category,
-            },
-          };
-        })
-      )
-      .pipe(tap(console.log));
+    return this.categoriesService.categories$.pipe(
+      map((categories): TableViewConfig => {
+        const category = {
+          label: 'Category',
+          filter: true,
+          isGroup: true,
+          selectableValues: categories.map((category) => ({
+            value: category.id,
+            viewValue: category.name,
+          })),
+        };
+        return {
+          ...DETAILED_EXPENSES_TABLE_VIEW_CONFIG,
+          columnDefs: {
+            ...DETAILED_EXPENSES_TABLE_VIEW_CONFIG.columnDefs,
+            category,
+          },
+        };
+      })
+    );
   }
 
   async handleImportExpenses(data: any[][]) {

@@ -24,6 +24,7 @@ import { ExpandableSearchComponent } from './expandable-search/expandable-search
 import { NgLetModule } from 'ng-let';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ClickedOutsideDirective } from './directives/clicked-outside.directive';
+import { LinkCellComponent } from './table/link-cell/link-cell.component';
 
 @NgModule({
   imports: [
@@ -56,6 +57,7 @@ import { ClickedOutsideDirective } from './directives/clicked-outside.directive'
     CategoryPipe,
     ExpandableSearchComponent,
     ClickedOutsideDirective,
+    LinkCellComponent,
   ],
   exports: [LogoComponent, TableComponent],
 })

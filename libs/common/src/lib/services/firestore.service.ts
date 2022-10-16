@@ -58,11 +58,13 @@ export class FirestoreService {
     const sampleRef = this.firestore.firestore.collection(collection);
     data.forEach((value) => {
       if (value['id']) {
-        console.log(`****** ??? ******`);
         const docRef = sampleRef.doc(value['id']);
         batch.update(docRef, updateValues);
       }
     });
     await batch.commit();
+  }
+  generateId(): string {
+    return this.firestore.createId();
   }
 }
