@@ -1,0 +1,8 @@
+<mat-card>
+  <div class='title title-size padding-y-m'>
+    Actual status by month
+  </div>
+  <ng-container *ngIf='expensesByMonth$ | async as expensesByMonths'>
+    <money-tracker-table [viewConfig]='viewConfig' [dataSource]='expensesByMonths'></money-tracker-table>
+  </ng-container>
+</mat-card>

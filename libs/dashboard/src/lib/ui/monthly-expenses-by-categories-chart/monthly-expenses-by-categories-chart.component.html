@@ -1,0 +1,21 @@
+<mat-card>
+  <mat-form-field appearance="standard">
+    <mat-label>Select month</mat-label>
+    <mat-select [formControl]="selectedMonthControl">
+      <mat-option
+        *ngFor="let month of selectableValues$ | async"
+        [value]="month"
+      >
+        {{ month }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div class='chart-container'>
+    <money-tracker-chart
+      *ngIf='relevantExpenses$ | async as relevantExpenses; else emptyState'
+      [viewConfig]='viewConfig'
+      [dataSource]='relevantExpenses'
+    ></money-tracker-chart>
+  </div>
+  <ng-template #emptyState> Please select a month </ng-template>
+</mat-card>

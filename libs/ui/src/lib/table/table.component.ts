@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ElementRef,
@@ -59,15 +58,14 @@ export class TableComponent implements OnInit, OnDestroy {
   constructor(private currencyPipe: CurrencyPipe, private datePipe: DatePipe) {}
 
   ngOnInit(): void {
+    console.log('this.dataSource:', this.dataSource);
     this.initViewConfig();
     this.displayedColumns = this.getDisplayedColumns();
-    console.log('this.displayedColumns:', this.displayedColumns);
   }
   initViewConfig() {
     this.viewConfig = {
       ...this.viewConfig,
       isResizeable: !!this.viewConfig.isResizeable,
-      isEditable: this.viewConfig.isEditable || true,
       rowSelection: this.viewConfig.rowSelection || 'multiple',
       isSelectable: !!this.viewConfig.isSelectable,
       shouldImport: !!this.viewConfig.shouldImport,
@@ -110,7 +108,6 @@ export class TableComponent implements OnInit, OnDestroy {
       cellClass: 'delete-cell',
     };
     const response = [
-      deleteCol,
       ...Object.keys(this.viewConfig.columnDefs).map((key): ColDef => {
         const currentConfig = this.viewConfig.columnDefs[key];
         const isLink = !!currentConfig.linkConfig;
@@ -150,7 +147,6 @@ export class TableComponent implements OnInit, OnDestroy {
             ...params,
           },
         });
-
         return {
           headerName,
           floatingFilter: shouldFilter,
@@ -176,6 +172,10 @@ export class TableComponent implements OnInit, OnDestroy {
         showDisabledCheckboxes: true,
       };
     }
+    if (this.viewConfig.isEditable) {
+      response.unshift(deleteCol);
+    }
+
     return response;
   }
 

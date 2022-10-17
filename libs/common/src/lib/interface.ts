@@ -1,3 +1,5 @@
+import { LegendPosition } from '@swimlane/ngx-charts';
+
 export interface ExpenseGroup {
   name: string;
   value: number;
@@ -40,6 +42,7 @@ export interface AssetGroupWorth {
 }
 export type TableViewConfig = {
   pagination?: boolean;
+  shouldDelete?: boolean;
   quickFilters?: boolean;
   addLabel?: string;
   isResizeable?: boolean;
@@ -67,4 +70,33 @@ export interface Category {
   name: string;
   id: string;
   user: string;
+  isYearly?: boolean;
 }
+
+export interface ExpenseByMonth {
+  month: number;
+  year: number;
+  income: number;
+  expensesAmount: number;
+  toSafeFund: number;
+  toInvestment: number;
+}
+
+export interface ExpenseByCategory {
+  category: string;
+  amount: number;
+  date: string;
+}
+export interface ChartDataSource {
+  name: string;
+  value: string | number;
+}
+export interface ChartViewConfig {
+  title: string;
+  chartType: ChartTypes;
+  showLegend: boolean;
+  legendPosition: LegendPosition;
+  showLabels: boolean;
+}
+
+type ChartTypes = 'pie' | 'bar';

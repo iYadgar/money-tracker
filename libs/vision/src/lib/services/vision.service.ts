@@ -1,30 +1,47 @@
 import { Injectable } from '@angular/core';
-import { combineLatestWith, map, Observable, take, tap } from 'rxjs';
+import { combineLatestWith, map, Observable } from 'rxjs';
 import {
   CategoriesService,
   COLLECTIONS,
+  DialogService,
   ExpenseGroup,
   FirestoreService,
   Income,
   UserService,
 } from '@money-tracker/common';
-import { AddExpanseDialogComponent } from '../ui/add-expanse-dialog/add-expanse-dialog.component';
 import { QueryFn } from '@angular/fire/compat/firestore';
-import { DialogService } from '@money-tracker/common';
 
 @Injectable({
   providedIn: 'root',
 })
 export class VisionService {
-  monthlyExpensesVision$: Observable<ExpenseGroup[]>;
-  yearlyExpensesVision$: Observable<ExpenseGroup[]>;
-  income$: Observable<Income>;
-
   get totalVisionMonthlyExpenses$() {
     return this.monthlyExpensesVision$.pipe(
       map((monthlyExpenses) => {
         return monthlyExpenses.reduce((pre, cur) => pre + cur.value, 0);
       })
+    );
+  }
+  get income$(): Observable<Income> {
+    const defaultIncome = {
+      user: this.userService.user.id || '',
+      value: 0,
+      id: '',
+    };
+    const queryFn: QueryFn = (ref) =>
+      ref.where('user', '==', this.userService.user.id);
+    return this.firestoreService
+      .getCollection<Income>(COLLECTIONS.INCOME, queryFn)
+      .pipe(map(([income]) => (income ? income : defaultIncome)));
+  }
+  get monthlyExpensesVision$(): Observable<ExpenseGroup[]> {
+    return this.firestoreService.getCollection<ExpenseGroup>(
+      COLLECTIONS.MONTHLY_EXPANSES
+    );
+  }
+  get yearlyExpensesVision$(): Observable<ExpenseGroup[]> {
+    return this.firestoreService.getCollection<ExpenseGroup>(
+      COLLECTIONS.YEARLY_EXPANSES
     );
   }
 
@@ -73,32 +90,8 @@ export class VisionService {
     return this.firestoreService
       .createDocument<ExpenseGroup>(collection, expense)
       .then(() => {
-        this.categoriesService.createCategory(expense?.name || '');
+        this.categoriesService.createCategory(expense?.name || '', isYearly);
       });
-  }
-
-  initExpensesAndIncome() {
-    this.monthlyExpensesVision$ =
-      this.firestoreService.getCollection<ExpenseGroup>(
-        COLLECTIONS.MONTHLY_EXPANSES
-      );
-
-    this.yearlyExpensesVision$ =
-      this.firestoreService.getCollection<ExpenseGroup>(
-        COLLECTIONS.YEARLY_EXPANSES
-      );
-  }
-  initIncome() {
-    const defaultIncome = {
-      user: this.userService.user.id || '',
-      value: 0,
-      id: '',
-    };
-    const queryFn: QueryFn = (ref) =>
-      ref.where('user', '==', this.userService.user.id);
-    this.income$ = this.firestoreService
-      .getCollection<Income>(COLLECTIONS.INCOME, queryFn)
-      .pipe(map(([income]) => (income ? income : defaultIncome)));
   }
 
   deleteExpense(expense: ExpenseGroup, isYearly: boolean) {

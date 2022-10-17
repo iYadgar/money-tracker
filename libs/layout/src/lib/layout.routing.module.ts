@@ -23,7 +23,7 @@ const routes: Routes = [
       {
         path: APP_ROUTES.DASHBOARD,
         loadChildren: () =>
-          import('@money-tracker/vision').then((m) => m.VisionModule),
+          import('@money-tracker/dashboard').then((m) => m.DashboardModule),
       },
       {
         path: APP_ROUTES.EXPENSES,

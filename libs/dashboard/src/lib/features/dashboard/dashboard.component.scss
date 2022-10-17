@@ -1,0 +1,29 @@
+:host{
+  display: flex;
+  flex: 1;
+  width: 100%;
+  padding: 48px;
+  .container{
+    display: flex;
+    gap: 16px;
+    width: calc(100% - 96px);
+    height: calc(100% - 48px);
+    .right-side-container{
+      display: flex;
+      flex-direction: column;
+      flex: 7;
+      gap: 16px;
+      money-tracker-actual-expenses{
+        flex: 4;
+      }
+      money-tracker-monthly-expenses-by-categories-chart{
+        flex: 6;
+      }
+    }
+    .left-side-container{
+      display: flex;
+      flex: 3;
+    }
+  }
+
+}

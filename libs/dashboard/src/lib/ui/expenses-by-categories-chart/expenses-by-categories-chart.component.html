@@ -1,0 +1,5 @@
+<mat-card *ngIf='expensesByCategories$ | async as expensesByCategories'>
+  <div class='chart-container'>
+    <money-tracker-chart [viewConfig]='viewConfig' [dataSource]='expensesByCategories'></money-tracker-chart>
+  </div>
+</mat-card>

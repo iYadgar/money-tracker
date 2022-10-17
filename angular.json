@@ -4,6 +4,7 @@
   "projects": {
     "assets": "libs/assets",
     "common": "libs/common",
+    "dashboard": "libs/dashboard",
     "expenses": "libs/expenses",
     "layout": "libs/layout",
     "money-tracker": "apps/money-tracker",

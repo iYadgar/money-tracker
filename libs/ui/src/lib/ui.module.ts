@@ -25,6 +25,9 @@ import { NgLetModule } from 'ng-let';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ClickedOutsideDirective } from './directives/clicked-outside.directive';
 import { LinkCellComponent } from './table/link-cell/link-cell.component';
+import { ChartComponent } from './chart/chart.component';
+import { BarChartModule, PieChartModule } from '@swimlane/ngx-charts';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
   imports: [
@@ -40,6 +43,9 @@ import { LinkCellComponent } from './table/link-cell/link-cell.component';
     MatNativeDateModule,
     NgLetModule,
     ReactiveFormsModule,
+    PieChartModule,
+    BarChartModule,
+    MatButtonToggleModule,
   ],
   providers: [
     CurrencyPipe,
@@ -58,7 +64,8 @@ import { LinkCellComponent } from './table/link-cell/link-cell.component';
     ExpandableSearchComponent,
     ClickedOutsideDirective,
     LinkCellComponent,
+    ChartComponent,
   ],
-  exports: [LogoComponent, TableComponent],
+  exports: [LogoComponent, TableComponent, ChartComponent],
 })
 export class UiModule {}

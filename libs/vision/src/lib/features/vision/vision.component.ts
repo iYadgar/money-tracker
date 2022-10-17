@@ -17,8 +17,6 @@ export class VisionComponent implements OnInit {
   constructor(private visionService: VisionService) {}
 
   ngOnInit() {
-    this.visionService.initExpensesAndIncome();
-    this.visionService.initIncome();
     this.yearlyExpenses$ = this.visionService.yearlyExpensesVision$;
     this.monthlyExpenses$ = this.visionService.monthlyExpensesVision$;
     this.income$ = this.visionService.income$.pipe(tap(console.log));

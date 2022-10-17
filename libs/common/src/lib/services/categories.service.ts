@@ -20,12 +20,13 @@ export class CategoriesService {
     );
   }
 
-  createCategory(name: string) {
+  createCategory(name: string, isYearly = false) {
     return this.firestoreService.createDocument<Category>(
       COLLECTIONS.CATEGORIES,
       {
         name,
         user: this.userService.user.id,
+        isYearly,
       }
     );
   }

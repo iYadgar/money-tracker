@@ -1,9 +1,9 @@
-<div class='actions'>
+<div class='actions' *ngIf='viewConfig.quickFilters || viewConfig.isEditable || viewConfig.shouldImport || viewConfig.shouldExport'>
   <div *ngIf='viewConfig.quickFilters' class='search'>
     <money-tracker-expandable-search (searchChanged)='handleQuickSearch($event)'></money-tracker-expandable-search>
   </div>
   <div class='buttons'>
-    <button mat-stroked-button color='primary' (click)='handleAddRow()'>
+    <button *ngIf='viewConfig.isEditable' mat-stroked-button color='primary' (click)='handleAddRow()'>
       {{viewConfig.addLabel || 'Add row'}}
     </button>
     <input #uploadInput hidden  id="input-file-id"  type="file" (change)='handleImport($event)' />

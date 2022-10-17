@@ -1,0 +1,55 @@
+<div class="actions">
+  <div class="title title-size">
+    {{ viewConfig.title }}
+  </div>
+  <mat-button-toggle-group
+    [formControl]="chartTypeToggleControl"
+    name="chartType"
+    aria-label="Chart type"
+  >
+    <mat-button-toggle value="pie"
+      ><mat-icon>pie_chart_outline</mat-icon></mat-button-toggle
+    >
+    <mat-button-toggle value="bar"
+      ><mat-icon>bar_chart_outline</mat-icon></mat-button-toggle
+    >
+  </mat-button-toggle-group>
+</div>
+
+<div class="chart-container">
+  <ng-container *ngIf="chartTypeToggleControl.value === 'pie'; else barChart">
+    <ngx-charts-pie-chart
+      [results]="dataSource"
+      [legend]="viewConfig.showLegend"
+      [labels]="viewConfig.showLabels"
+      [legendPosition]="viewConfig.legendPosition"
+      [view]="view"
+      [gradient]="true"
+      [doughnut]="true"
+    ></ngx-charts-pie-chart>
+  </ng-container>
+
+  <ng-template #barChart>
+    <ng-container *ngIf="barPosition === 'vertical'; else horizontalBarChart">
+      <ngx-charts-bar-vertical
+        [results]="dataSource"
+        [legend]="viewConfig.showLegend"
+        [legendPosition]="viewConfig.legendPosition"
+        [xAxis]="viewConfig.showLabels"
+        [view]="view"
+        [gradient]="true"
+      ></ngx-charts-bar-vertical>
+    </ng-container>
+  </ng-template>
+</div>
+
+<ng-template #horizontalBarChart>
+  <ngx-charts-bar-horizontal
+    [results]="dataSource"
+    [legend]="viewConfig.showLegend"
+    [legendPosition]="viewConfig.legendPosition"
+    [yAxis]="viewConfig.showLabels"
+    [view]="view"
+    [gradient]="true"
+  ></ngx-charts-bar-horizontal>
+</ng-template>

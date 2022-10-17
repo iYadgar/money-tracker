@@ -1,5 +1,6 @@
 import { APP_ROUTES } from './enums';
-import { TableViewConfig } from './interface';
+import { ChartViewConfig, TableViewConfig } from './interface';
+import { LegendPosition } from '@swimlane/ngx-charts';
 
 export const APP_ROUTES_CONFIG: { path: string; icon: string }[] = [
   {
@@ -21,6 +22,7 @@ export const APP_ROUTES_CONFIG: { path: string; icon: string }[] = [
 ];
 
 export const EXPENSES_TABLE_VIEW_CONFIG: TableViewConfig = {
+  isEditable: true,
   columnDefs: {
     name: { isCurrency: false, label: 'Name' },
     value: { isCurrency: true, label: 'Amount' },
@@ -28,6 +30,7 @@ export const EXPENSES_TABLE_VIEW_CONFIG: TableViewConfig = {
 };
 
 export const DETAILED_EXPENSES_TABLE_VIEW_CONFIG: TableViewConfig = {
+  isEditable: true,
   isSelectable: true,
   rowSelection: 'multiple',
   shouldImport: true,
@@ -43,6 +46,7 @@ export const DETAILED_EXPENSES_TABLE_VIEW_CONFIG: TableViewConfig = {
 
 export const ASSETS_TABLE_VIEW_CONFIG: TableViewConfig = {
   isResizeable: true,
+  isEditable: true,
   columnDefs: {
     type: { label: 'Type' },
     link: {
@@ -67,4 +71,31 @@ export const ASSETS_TABLE_VIEW_CONFIG: TableViewConfig = {
       ],
     },
   },
+};
+export const ACTUAL_EXPENSES_TABLE_CONFIG: TableViewConfig = {
+  isEditable: false,
+  shouldDelete: false,
+  columnDefs: {
+    month: { label: 'Month' },
+    year: { label: 'Year' },
+    income: { label: 'Income', isCurrency: true },
+    expensesAmount: { label: 'Expenses', isCurrency: true },
+    toSafeFund: { label: 'To safe fund', isCurrency: true },
+    toInvestment: { label: 'To investment', isCurrency: true },
+  },
+};
+
+export const EXPENSE_BY_CATEGORY_CHART_CONFIG: ChartViewConfig = {
+  title: 'All time expenses by categories',
+  chartType: 'pie',
+  showLabels: true,
+  showLegend: false,
+  legendPosition: LegendPosition.Below,
+};
+export const MONTHLY_EXPENSE_BY_CATEGORY_CHART_CONFIG: ChartViewConfig = {
+  title: 'Monthly expenses by categories',
+  chartType: 'bar',
+  showLabels: true,
+  showLegend: false,
+  legendPosition: LegendPosition.Below,
 };
