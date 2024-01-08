@@ -4,10 +4,13 @@ export interface ExpenseGroup {
   name: string;
   value: number;
   id: string;
+  user: string;
 }
 export interface User {
-  name: string;
+  displayName: string;
   id: string;
+  email?: string;
+  photoURL?: string;
 }
 
 export interface Income {
@@ -27,6 +30,7 @@ export interface AssetGroup {
   createdAt: string;
   assets: Asset[];
   id: string;
+  user: string;
 }
 export interface Asset {
   type: string;

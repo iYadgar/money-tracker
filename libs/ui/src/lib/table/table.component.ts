@@ -58,7 +58,6 @@ export class TableComponent implements OnInit, OnDestroy {
   constructor(private currencyPipe: CurrencyPipe, private datePipe: DatePipe) {}
 
   ngOnInit(): void {
-    console.log('this.dataSource:', this.dataSource);
     this.initViewConfig();
     this.displayedColumns = this.getDisplayedColumns();
   }
@@ -116,8 +115,6 @@ export class TableComponent implements OnInit, OnDestroy {
         const headerName = currentConfig.label;
         const isDateColumn = currentConfig.isDate;
         const shouldFilter = currentConfig.filter;
-        const isGroup = !!currentConfig.isGroup;
-        console.log('isGroup:', isGroup);
         const currentFilter = shouldFilter && {
           filter: isDateColumn
             ? 'agDateColumnFilter'
@@ -163,6 +160,9 @@ export class TableComponent implements OnInit, OnDestroy {
         };
       }),
     ];
+    if (this.viewConfig.isEditable) {
+      response.unshift(deleteCol);
+    }
     if (this.viewConfig.isSelectable) {
       response[1] = {
         ...response[1],
@@ -171,9 +171,6 @@ export class TableComponent implements OnInit, OnDestroy {
         checkboxSelection: true,
         showDisabledCheckboxes: true,
       };
-    }
-    if (this.viewConfig.isEditable) {
-      response.unshift(deleteCol);
     }
 
     return response;
@@ -209,7 +206,6 @@ export class TableComponent implements OnInit, OnDestroy {
 
   onSelectionChange(event: SelectionChangedEvent<any>) {
     const selectedRows = event.api.getSelectedRows();
-    console.log('selectedRows:', selectedRows);
   }
 
   handleQuickSearch(value: string) {

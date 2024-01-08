@@ -1,0 +1,16 @@
+<nav class="flx flx-grow padding-x-m title navbar">
+  {{ activeRoute$ | async | titlecase }}
+  <ng-container *ngIf="userService.userStream$ | async as user">
+    <img
+      [mat-menu-trigger-for]="menu"
+      class="avatar"
+      mat-card-avatar
+      [src]="user?.photoURL || ''"
+      alt="avatar"
+    />
+    <mat-menu #menu="matMenu">
+      <b class='padding-m' >{{ user?.displayName }}</b>
+      <button (click)='handleLogout()' mat-menu-item><mat-icon>logout_outline</mat-icon>Logout</button>
+    </mat-menu>
+  </ng-container>
+</nav>

@@ -18,6 +18,7 @@ import {
 } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UiModule } from '@money-tracker/ui';
+import { AuthGuard } from '@angular/fire/auth-guard';
 
 @NgModule({
   imports: [
@@ -40,8 +41,6 @@ import { UiModule } from '@money-tracker/ui';
     SummaryComponent,
     AddExpanseDialogComponent,
   ],
-  providers: [
-    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: false } },
-  ],
+  providers: [[AuthGuard]],
 })
 export class VisionModule {}

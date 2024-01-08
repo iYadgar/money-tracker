@@ -27,15 +27,16 @@ export class ExpensesComponent implements OnInit {
   }
 
   handleEditCell(expense: DetailedExpense) {
-    console.log('expense:', expense);
-    this.expensesService.editExpense(expense);
+    this.expensesService.editExpense({
+      ...expense,
+      value: +expense.value || 0,
+    });
   }
 
   async handleImport($event: any[][]) {
     await this.expensesService.handleImportExpenses($event);
   }
   async bulkUpdate(event: TableBulkUpdateEvent) {
-    console.log('event:', event);
     await this.expensesService.bulkUpdate(event);
   }
 }

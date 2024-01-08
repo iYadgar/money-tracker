@@ -1,5 +1,14 @@
 import { Injectable } from '@angular/core';
-import { combineLatestWith, map, Observable } from 'rxjs';
+import {
+  combineLatest,
+  combineLatestWith,
+  map,
+  Observable,
+  of,
+  startWith,
+  switchMap,
+  take,
+} from 'rxjs';
 import {
   CategoriesService,
   COLLECTIONS,
@@ -9,7 +18,6 @@ import {
   Income,
   UserService,
 } from '@money-tracker/common';
-import { QueryFn } from '@angular/fire/compat/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -23,25 +31,29 @@ export class VisionService {
     );
   }
   get income$(): Observable<Income> {
-    const defaultIncome = {
-      user: this.userService.user.id || '',
-      value: 0,
-      id: '',
-    };
-    const queryFn: QueryFn = (ref) =>
-      ref.where('user', '==', this.userService.user.id);
+    const defaultIncome$ = this.userService.userStream$.pipe(
+      map((user) => ({
+        value: 0,
+        id: '',
+        user: user?.id || '',
+      }))
+    );
     return this.firestoreService
-      .getCollection<Income>(COLLECTIONS.INCOME, queryFn)
-      .pipe(map(([income]) => (income ? income : defaultIncome)));
+      .getCollection<Income>(COLLECTIONS.INCOME)
+      .pipe(switchMap(([income]) => (income ? of(income) : defaultIncome$)));
   }
   get monthlyExpensesVision$(): Observable<ExpenseGroup[]> {
-    return this.firestoreService.getCollection<ExpenseGroup>(
-      COLLECTIONS.MONTHLY_EXPANSES
+    return this.convertExpenseNameToCategory(
+      this.firestoreService.getCollection<ExpenseGroup>(
+        COLLECTIONS.MONTHLY_EXPENSES
+      )
     );
   }
   get yearlyExpensesVision$(): Observable<ExpenseGroup[]> {
-    return this.firestoreService.getCollection<ExpenseGroup>(
-      COLLECTIONS.YEARLY_EXPANSES
+    return this.convertExpenseNameToCategory(
+      this.firestoreService.getCollection<ExpenseGroup>(
+        COLLECTIONS.YEARLY_EXPENSES
+      )
     );
   }
 
@@ -60,9 +72,17 @@ export class VisionService {
   }
 
   get forInvestment() {
-    return this.totalVisionMonthlyExpenses$.pipe(
-      combineLatestWith(this.moneyForYearlyExpenses$),
-      map(([totalExpanses, yearlyExpanses]) => totalExpanses - yearlyExpanses)
+    return combineLatest([
+      this.totalVisionMonthlyExpenses$,
+      this.moneyForYearlyExpenses$,
+      this.income$,
+    ]).pipe(
+      map(([totalExpanses, yearlyExpanses, income]) => {
+        if (income.value) {
+          return income.value - totalExpanses - yearlyExpanses;
+        }
+        return 0;
+      })
     );
   }
 
@@ -83,27 +103,32 @@ export class VisionService {
     }
     return this.firestoreService.createDocument(COLLECTIONS.INCOME, income);
   }
-  createExpense(expense: Partial<ExpenseGroup>, isYearly: boolean) {
-    const collection = isYearly
-      ? COLLECTIONS.YEARLY_EXPANSES
-      : COLLECTIONS.MONTHLY_EXPANSES;
-    return this.firestoreService
-      .createDocument<ExpenseGroup>(collection, expense)
-      .then(() => {
-        this.categoriesService.createCategory(expense?.name || '', isYearly);
+  async createExpense(expense: Partial<ExpenseGroup>, isYearly: boolean) {
+    const categoryId = await this.categoriesService.createCategory(
+      expense?.name || '',
+      isYearly
+    );
+    if (categoryId) {
+      const collection = isYearly
+        ? COLLECTIONS.YEARLY_EXPENSES
+        : COLLECTIONS.MONTHLY_EXPENSES;
+      await this.firestoreService.createDocument<ExpenseGroup>(collection, {
+        ...expense,
+        name: categoryId,
       });
+    }
   }
 
   deleteExpense(expense: ExpenseGroup, isYearly: boolean) {
     const collection = isYearly
-      ? COLLECTIONS.YEARLY_EXPANSES
-      : COLLECTIONS.MONTHLY_EXPANSES;
+      ? COLLECTIONS.YEARLY_EXPENSES
+      : COLLECTIONS.MONTHLY_EXPENSES;
     this.firestoreService.deleteDocument<ExpenseGroup>(collection, expense.id);
   }
-  editExpense(expense: ExpenseGroup, isYearly: boolean) {
+  async editExpense(expense: ExpenseGroup, isYearly: boolean) {
     const collection = isYearly
-      ? COLLECTIONS.YEARLY_EXPANSES
-      : COLLECTIONS.MONTHLY_EXPANSES;
+      ? COLLECTIONS.YEARLY_EXPENSES
+      : COLLECTIONS.MONTHLY_EXPENSES;
     if (expense.id) {
       this.firestoreService.updateDocument<ExpenseGroup>(
         collection,
@@ -111,7 +136,25 @@ export class VisionService {
         expense
       );
     } else {
-      this.createExpense(expense, isYearly);
+      await this.createExpense(expense, isYearly);
     }
+  }
+  convertExpenseNameToCategory(
+    expenses$: Observable<ExpenseGroup[]>
+  ): Observable<ExpenseGroup[]> {
+    return combineLatest([this.categoriesService.categories$, expenses$]).pipe(
+      startWith([[], []]),
+      map(([categories, expenses]) => {
+        if (categories.length && expenses.length) {
+          return expenses.map((expense) => ({
+            ...expense,
+            name:
+              categories.find((category) => category.id === expense.name)
+                ?.name || expense.name,
+          }));
+        }
+        return [];
+      })
+    );
   }
 }

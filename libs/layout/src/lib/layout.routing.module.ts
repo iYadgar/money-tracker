@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
 import { APP_ROUTES } from '@money-tracker/common';
+import { AuthGuard } from '@angular/fire/auth-guard';
 
 const routes: Routes = [
   {
@@ -43,5 +44,6 @@ const routes: Routes = [
   declarations: [],
   imports: [CommonModule, RouterModule.forChild(routes)],
   exports: [RouterModule],
+  providers: [AuthGuard],
 })
 export class LayoutRoutingModule {}

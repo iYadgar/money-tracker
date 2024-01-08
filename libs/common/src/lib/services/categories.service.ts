@@ -3,16 +3,12 @@ import { FirestoreService } from './firestore.service';
 import { Observable } from 'rxjs';
 import { Category } from '../interface';
 import { COLLECTIONS } from '../enums';
-import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoriesService {
-  constructor(
-    private firestoreService: FirestoreService,
-    private userService: UserService
-  ) {}
+  constructor(private firestoreService: FirestoreService) {}
 
   get categories$(): Observable<Category[]> {
     return this.firestoreService.getCollection<Category>(
@@ -20,12 +16,11 @@ export class CategoriesService {
     );
   }
 
-  createCategory(name: string, isYearly = false) {
+  async createCategory(name: string, isYearly = false) {
     return this.firestoreService.createDocument<Category>(
       COLLECTIONS.CATEGORIES,
       {
         name,
-        user: this.userService.user.id,
         isYearly,
       }
     );

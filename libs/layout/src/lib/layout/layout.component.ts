@@ -1,7 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { APP_ROUTES } from '@money-tracker/common';
-import { LayoutService } from '../services/layout.service';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'money-tracker-layout',
@@ -9,10 +6,4 @@ import { LayoutService } from '../services/layout.service';
   styleUrls: ['./layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LayoutComponent implements OnInit {
-  activeRoute$: Observable<APP_ROUTES>;
-  constructor(private layoutService: LayoutService) {}
-  ngOnInit(): void {
-    this.activeRoute$ = this.layoutService.getCurrentRoute();
-  }
-}
+export class LayoutComponent {}

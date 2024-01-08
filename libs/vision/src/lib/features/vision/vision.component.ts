@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { combineLatest, combineLatestWith, map, Observable, tap } from 'rxjs';
+import { combineLatest, map, Observable } from 'rxjs';
 import { ExpenseGroup, Income } from '@money-tracker/common';
 import { VisionService } from '../../services/vision.service';
 
@@ -19,7 +19,7 @@ export class VisionComponent implements OnInit {
   ngOnInit() {
     this.yearlyExpenses$ = this.visionService.yearlyExpensesVision$;
     this.monthlyExpenses$ = this.visionService.monthlyExpensesVision$;
-    this.income$ = this.visionService.income$.pipe(tap(console.log));
+    this.income$ = this.visionService.income$;
     this.setSummaries();
   }
 
@@ -53,7 +53,7 @@ export class VisionComponent implements OnInit {
   }) {
     this.visionService.deleteExpense(expense, isYearly);
   }
-  onEditExpense(expense: ExpenseGroup, isYearly = false) {
-    this.visionService.editExpense(expense, isYearly);
+  async onEditExpense(expense: ExpenseGroup, isYearly = false) {
+    await this.visionService.editExpense(expense, isYearly);
   }
 }

@@ -23,6 +23,26 @@ export class DashboardService {
       map(this.getExpensesByCategory)
     );
   }
+  get detailedExpensesByMonthDict$(): Observable<
+    Record<string, DetailedExpense[]>
+  > {
+    return this.expensesService.detailedExpenses$.pipe(
+      map((expenses) => {
+        return expenses.reduce((acc, expense) => {
+          const expenseDate = new Date(expense.date);
+          const dateKey = `${
+            expenseDate.getMonth() + 1
+          }/${expenseDate.getFullYear()}`;
+          if (acc[dateKey]) {
+            acc[dateKey] = [...acc[dateKey], expense];
+          } else {
+            acc[dateKey] = [expense];
+          }
+          return acc;
+        }, {} as any);
+      })
+    );
+  }
 
   get totalMonthlyExpenses$(): Observable<ExpenseByMonth[]> {
     return combineLatest([
@@ -31,9 +51,9 @@ export class DashboardService {
       this.expensesByMonthDict$,
     ]).pipe(
       map(([{ value: income }, toSafeFund, expensesByMonthDict]) => {
-        return Object.entries(expensesByMonthDict).map(
-          ([key, expensesAmount]) => {
-            const month = +key.split('/')[0] + 1;
+        return Object.entries(expensesByMonthDict)
+          .map(([key, expensesAmount]) => {
+            const month = +key.split('/')[0];
             const year = +key.split('/')[1];
             return {
               month,
@@ -43,8 +63,8 @@ export class DashboardService {
               toSafeFund,
               toInvestment: income - expensesAmount - toSafeFund,
             };
-          }
-        );
+          })
+          .sort((a, b) => a.month - b.month);
       })
     );
   }
@@ -70,6 +90,7 @@ export class DashboardService {
   }
 
   getExpensesByCategory(expenses: DetailedExpense[]): ExpenseByCategory[] {
+    console.log('expenses:', expenses);
     const expensesByCategoryMap = expenses.reduce((acc, expense) => {
       if (expense.category) {
         acc[expense.category] = {

@@ -53,7 +53,7 @@ export class ExpensesService {
   createExpense(expense: Partial<DetailedExpense>) {
     return this.firestoreService.createDocument<DetailedExpense>(
       COLLECTIONS.DETAILED_EXPENSES,
-      { ...expense, user: this.userService.user.id }
+      expense
     );
   }
   deleteExpense(expense: DetailedExpense) {
@@ -105,7 +105,6 @@ export class ExpensesService {
     };
     const expenses = data.map(([date, name, value]) => {
       const expense: Partial<DetailedExpense> = {
-        user: this.userService.user.id,
         date: handleDate(date),
         name,
         value,
@@ -121,8 +120,6 @@ export class ExpensesService {
   }
 
   async bulkUpdate(data: TableBulkUpdateEvent) {
-    console.log('data:', data);
-    console.log(`****** ??? ******`);
     this.isUpdatingBulk$.next(true);
     await this.firestoreService.batchUpdate<Partial<DetailedExpense>>(
       COLLECTIONS.DETAILED_EXPENSES,

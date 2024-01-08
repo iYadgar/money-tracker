@@ -1,0 +1,25 @@
+:host{
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(180deg, rgba(24,16,83,0.15) -21.94%, rgba(48, 24, 64, 0.16) 17.1%, rgba(63, 3, 59, 0.16) 62.89%, rgba(89, 38, 53, 0.5) 110.93%);
+  mat-card{
+    //display: flex;
+    //align-items: center;
+    //justify-content: center;
+    padding: 48px;
+    height: 400px;
+    width: 300px;
+    background: linear-gradient(180deg, #181053 -21.94%, #301840 17.1%, #3F033B 62.89%, #592635 110.93%);
+    .buttons{
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      margin-top: 48px;
+      height: 50%;
+    }
+  }
+
+}

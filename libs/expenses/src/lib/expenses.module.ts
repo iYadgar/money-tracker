@@ -4,6 +4,7 @@ import { ExpensesRoutingModule } from './expenses-routing.module';
 import { ExpensesComponent } from './features/expenses/expenses.component';
 import { UiModule } from '@money-tracker/ui';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AuthGuard } from '@angular/fire/auth-guard';
 
 @NgModule({
   imports: [
@@ -13,5 +14,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatProgressSpinnerModule,
   ],
   declarations: [ExpensesComponent],
+  providers: [AuthGuard],
 })
 export class ExpensesModule {}

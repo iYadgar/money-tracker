@@ -1,0 +1,18 @@
+:host{
+  display: flex;
+  height: 60px;
+  width: 100%;
+  min-height: 60px;
+  max-height: 60px;
+
+  .navbar{
+    align-items: center;
+    font-size: 26px;
+    max-height: 60px;
+    background: white;
+    justify-content: space-between;
+    .avatar{
+      cursor: pointer;
+    }
+  }
+}

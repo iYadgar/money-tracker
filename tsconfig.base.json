@@ -21,6 +21,7 @@
       "@money-tracker/dashboard": ["libs/dashboard/src/index.ts"],
       "@money-tracker/expenses": ["libs/expenses/src/index.ts"],
       "@money-tracker/layout": ["libs/layout/src/index.ts"],
+      "@money-tracker/login": ["libs/login/src/index.ts"],
       "@money-tracker/ui": ["libs/ui/src/index.ts"],
       "@money-tracker/vision": ["libs/vision/src/index.ts"]
     }

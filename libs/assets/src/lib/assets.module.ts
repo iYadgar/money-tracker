@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CreateNewGroupDialogComponent } from './features/assets/create-new-group-dialog/create-new-group-dialog.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { AuthGuard } from '@angular/fire/auth-guard';
 
 @NgModule({
   imports: [
@@ -27,5 +28,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     CreateNewGroupComponent,
     CreateNewGroupDialogComponent,
   ],
+  providers: [AuthGuard],
 })
 export class AssetsModule {}

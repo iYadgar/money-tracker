@@ -6,6 +6,9 @@ import { SidePanelComponent } from './ui/side-panel/side-panel.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { UiModule } from '@money-tracker/ui';
+import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
+import { NavbarComponent } from './ui/navbar/navbar.component';
 
 @NgModule({
   imports: [
@@ -14,7 +17,9 @@ import { UiModule } from '@money-tracker/ui';
     MatIconModule,
     MatButtonModule,
     UiModule,
+    MatCardModule,
+    MatMenuModule,
   ],
-  declarations: [LayoutComponent, SidePanelComponent],
+  declarations: [LayoutComponent, SidePanelComponent, NavbarComponent],
 })
 export class LayoutModule {}

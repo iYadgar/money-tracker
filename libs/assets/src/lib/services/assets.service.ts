@@ -54,8 +54,7 @@ export class AssetsService {
                       )
                     : [],
                 };
-                console.log('template:', template);
-                await this.firestoreService.createDocument<AssetGroup>(
+                this.firestoreService.createDocument<AssetGroup>(
                   COLLECTIONS.ASSETS,
                   template
                 );
@@ -76,7 +75,6 @@ export class AssetsService {
       }
       return asset;
     });
-    console.log('updatedGroup:', updatedGroup);
     this.firestoreService.updateDocument<AssetGroup>(
       COLLECTIONS.ASSETS,
       group.id,

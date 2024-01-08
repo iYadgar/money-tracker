@@ -10,6 +10,7 @@ import { MonthlyExpensesByCategoriesChartComponent } from './ui/monthly-expenses
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AuthGuard } from '@angular/fire/auth-guard';
 
 @NgModule({
   imports: [
@@ -27,5 +28,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     ExpensesByCategoriesChartComponent,
     MonthlyExpensesByCategoriesChartComponent,
   ],
+  providers: [AuthGuard],
 })
 export class DashboardModule {}

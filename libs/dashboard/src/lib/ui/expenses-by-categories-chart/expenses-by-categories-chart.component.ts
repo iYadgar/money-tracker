@@ -20,14 +20,14 @@ export class ExpensesByCategoriesChartComponent implements OnInit {
   ngOnInit(): void {
     this.expensesByCategories$ =
       this.dashboardService.expensesByCategories$.pipe(
-        map((expenses) =>
-          expenses
+        map((expenses) => {
+          return expenses
             .map((expense) => ({
               value: expense.amount,
               name: expense.category,
             }))
-            .sort((a, b) => b.value - a.value)
-        )
+            .sort((a, b) => b.value - a.value);
+        })
       );
   }
 }
